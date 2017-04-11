@@ -29,6 +29,7 @@ public class PixTastic extends Application
             public void handle(ActionEvent event)
                 {
                     System.out.println("Success");
+                    window.close();
                 }
         });
         
