@@ -30,7 +30,6 @@ public class PixTastic extends Application
                 {
                     System.out.println("Success");
                     window.close();
-                    hgbgb;
                 }
         });
         
