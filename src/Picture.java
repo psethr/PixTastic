@@ -55,7 +55,6 @@ public class Picture
     {
         return hashtag;
     }
-   
     /**
      * Accessor method for likes.
      * @return the number of likes a picture has
