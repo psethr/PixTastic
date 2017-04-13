@@ -7,16 +7,19 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 
 public class PixTastic extends Application
 {
     Stage window;
-    Button button;
-    Label name;
-    HBox topMenu;
-    HBox centerMenu;
+    Button closeButton, loginButton, createAccount, guest;
+    Label title1, title2, titleSlogan, author;
+    HBox centerMenu, rightMenu, topMenu1;
+    VBox topMenu;
     BorderPane borderPane;
     
     public static void main(String[] args)
@@ -29,13 +32,18 @@ public class PixTastic extends Application
     {
         this.window = window;
         window.setTitle("PixTastic");
-        
-        name = new Label("PixTastic");
-        name.setFont(Font.font("Permanent Marker", 80));
-        
-        button = new Button();
-        button.setText("Close Program");
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        title1 = new Label("Pix");
+        title1.setFont(Font.font("Arial Black", 80));
+        title1.setTextFill(Color.DARKRED);
+        title2 = new Label("Tastic");
+        title2.setFont(Font.font("Arial Black", 80));
+        titleSlogan = new Label("\"A pix is worth a thousand words\"");
+        titleSlogan.setFont(Font.font("Brush Script MT", 45));
+        author = new Label("Created By: Seth Perts, Rachel Mooney, Tiffany Lower");
+        author.setTextFill(Color.BLUE);
+        closeButton = new Button();
+        closeButton.setText("Close Program");
+        closeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
                 {
@@ -43,19 +51,34 @@ public class PixTastic extends Application
                     window.close();
                 }
         });
-        Button button2 = new Button("Login");
-        button2.setFont(Font.font("Arial", 50));
-        topMenu = new HBox();
-        topMenu.setAlignment(Pos.CENTER);
+        loginButton = new Button("Login");
+        loginButton.setFont(Font.font("Arial", 30));
+        createAccount = new Button("Create an\nAccount");
+        createAccount.setFont(Font.font("Arial", 30));
+        createAccount.setTextAlignment(TextAlignment.CENTER);
+        guest = new Button("Guest");
+        guest.setFont(Font.font("Arial", 30));
+        
+        topMenu1 = new HBox();
+        topMenu1.setAlignment(Pos.CENTER_LEFT);
+        topMenu1.getChildren().addAll(title1, title2);
+        topMenu = new VBox();
+        topMenu.setAlignment(Pos.CENTER_LEFT);
         topMenu.setPadding(new Insets(10));
-        topMenu.setSpacing(500.0);
-        topMenu.getChildren().addAll(name, button);
+        topMenu.getChildren().addAll(topMenu1, titleSlogan);
         centerMenu = new HBox();
-        centerMenu.getChildren().addAll(button2);
         centerMenu.setAlignment(Pos.CENTER);
+        centerMenu.setSpacing(50);
+        centerMenu.getChildren().addAll(loginButton, createAccount, guest);
+        rightMenu = new HBox();
+        rightMenu.setPadding(new Insets(10));
+        rightMenu.setAlignment(Pos.BOTTOM_RIGHT);
+        rightMenu.setSpacing(600);
+        rightMenu.getChildren().addAll(author, closeButton);
         borderPane = new BorderPane();
         borderPane.setTop(topMenu);
         borderPane.setCenter(centerMenu);
+        borderPane.setBottom(rightMenu);
         
         Scene scene = new Scene(borderPane, 1000, 900);
         
