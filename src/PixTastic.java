@@ -38,9 +38,9 @@ public class PixTastic extends Application
         });
         title1 = new Label("Pix");
         title1.setFont(Font.font("Arial Black", 80));
-        title1.setTextFill(Color.DARKRED);
         title2 = new Label("Tastic");
         title2.setFont(Font.font("Arial Black", 80));
+        title2.setTextFill(Color.DARKRED);
         titleSlogan = new Label("\"A pix is worth a thousand words\"");
         titleSlogan.setFont(Font.font("Brush Script MT", 45));
         author = new Label("Created By: Seth Perts, Rachel Mooney, Tiffany Lower");

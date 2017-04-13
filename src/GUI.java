@@ -22,7 +22,7 @@ public class GUI
     
     private static boolean comfirmBoxAnswer;
     
-    public void AlertBox(String title, String message)
+    public static void AlertBox(String title, String message)
     {
         alertBoxStage = new Stage();
         alertBoxStage.initModality(Modality.APPLICATION_MODAL);
@@ -34,7 +34,7 @@ public class GUI
         alertBoxButton = new Button("OK");
         alertBoxButton.setOnAction(e -> alertBoxStage.close());
         
-        alertBoxVBox = new VBox();
+        alertBoxVBox = new VBox(10);
         alertBoxVBox.setAlignment(Pos.CENTER);
         alertBoxVBox.getChildren().addAll(alertBoxLabel, alertBoxButton);
         
