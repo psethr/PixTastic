@@ -8,19 +8,19 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 
 public class PixTastic extends Application
 {
-    Stage window;
-    Button closeButton, loginButton, createAccount, guest;
-    Label title1, title2, titleSlogan, author;
-    HBox centerMenu, rightMenu, topMenu1;
-    VBox topMenu;
-    BorderPane borderPane;
+    private Stage window;
+    private Scene startPage;
+    private Button closeButton, loginButton, createAccount, guest;
+    private Label title1, title2, titleSlogan, author;
+    private HBox centerMenu, rightMenu, topMenu1;
+    private VBox topMenu;
+    private BorderPane borderPane;
     
     public static void main(String[] args)
     {
@@ -32,6 +32,10 @@ public class PixTastic extends Application
     {
         this.window = window;
         window.setTitle("PixTastic");
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            exitProgram();
+        });
         title1 = new Label("Pix");
         title1.setFont(Font.font("Arial Black", 80));
         title1.setTextFill(Color.DARKRED);
@@ -47,8 +51,7 @@ public class PixTastic extends Application
             @Override
             public void handle(ActionEvent event)
                 {
-                    System.out.println("Success");
-                    window.close();
+                    exitProgram();
                 }
         });
         loginButton = new Button("Login");
@@ -80,9 +83,18 @@ public class PixTastic extends Application
         borderPane.setCenter(centerMenu);
         borderPane.setBottom(rightMenu);
         
-        Scene scene = new Scene(borderPane, 1000, 900);
+        startPage = new Scene(borderPane, 1000, 900);
         
-        window.setScene(scene);
+        window.setScene(startPage);
         window.show();
+    }
+    
+    public void exitProgram()
+    {
+        Boolean answer = GUI.ConfirmBox("Exit Program", "Are you sure you want to exit the program?");
+        if (answer == true)
+        {
+            window.close();
+        }
     }
 }
