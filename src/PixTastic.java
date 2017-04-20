@@ -1,4 +1,6 @@
 //Authors seth, rachel, tiffany
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,23 +18,27 @@ import java.time.LocalDate;
 
 public class PixTastic extends Application
 {
-    private Stage window;
-    private Scene startPage;
-    private Button closeButton, loginButton, createAccount, guest;
-    private Label title1, title2, titleSlogan, author;
-    private HBox centerMenu, rightMenu, topMenu1;
-    private VBox topMenu;
-    private BorderPane borderPane;
+    /**public static Stage window;
+    public static Scene startPage;
+    public static Button closeButton, loginButton, createAccount, guest;
+    public static Label title1, title2, titleSlogan, author;
+    public static HBox centerMenu, bottomMenu, topMenu1;
+    public static VBox topMenu;
+    public static BorderPane borderPane;*/
+    
+    
     
     public static void main(String[] args)
     {
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
         launch(args);
     }
     
     @Override
     public void start(Stage window)
     {
-        this.window = window;
+        GUI.startProgram(window);
+        /*PixTastic.window = window;
         window.setTitle("PixTastic");
         window.setOnCloseRequest(e -> {
             e.consume();
@@ -58,9 +64,15 @@ public class PixTastic extends Application
         });
         loginButton = new Button("Login");
         loginButton.setFont(Font.font("Arial", 30));
+        loginButton.setOnAction(e -> {
+            GUI.Login();
+        });
         createAccount = new Button("Create an\nAccount");
         createAccount.setFont(Font.font("Arial", 30));
         createAccount.setTextAlignment(TextAlignment.CENTER);
+        createAccount.setOnAction(e -> {
+            GUI.CreateAccount();
+        });
         guest = new Button("Guest");
         guest.setFont(Font.font("Arial", 30));
         
@@ -75,28 +87,28 @@ public class PixTastic extends Application
         centerMenu.setAlignment(Pos.CENTER);
         centerMenu.setSpacing(50);
         centerMenu.getChildren().addAll(loginButton, createAccount, guest);
-        rightMenu = new HBox();
-        rightMenu.setPadding(new Insets(10));
-        rightMenu.setAlignment(Pos.BOTTOM_RIGHT);
-        rightMenu.setSpacing(600);
-        rightMenu.getChildren().addAll(author, closeButton);
+        bottomMenu = new HBox();
+        bottomMenu.setPadding(new Insets(10));
+        bottomMenu.setAlignment(Pos.BOTTOM_RIGHT);
+        bottomMenu.setSpacing(600);
+        bottomMenu.getChildren().addAll(author, closeButton);
         borderPane = new BorderPane();
         borderPane.setTop(topMenu);
         borderPane.setCenter(centerMenu);
-        borderPane.setBottom(rightMenu);
+        borderPane.setBottom(bottomMenu);
         
         startPage = new Scene(borderPane, 1000, 900);
         
         window.setScene(startPage);
-        window.show();
+        window.show();*/
     }
     
-    public void exitProgram()
+    /*public void exitProgram()
     {
         Boolean answer = GUI.ConfirmBox("Exit Program", "Are you sure you want to exit the program?");
         if (answer == true)
         {
             window.close();
         }
-    }
+    }*/
 }
