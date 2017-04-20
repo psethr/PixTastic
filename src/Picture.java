@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+
 public class Picture
 {
     protected String filepath;  //filepath of the picture
@@ -5,6 +7,7 @@ public class Picture
     protected String comments; //comments attached to the picture
     protected String hashtag; //hashtags assigned to the picture
     protected int likes; //number of likes associated with a picture
+    protected LocalDateTime time;  //time a picture was 
     
     /**
     *  Default constructor to initialize a picture.
@@ -14,12 +17,14 @@ public class Picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
     */
-    public Picture(String f, String cap, String com, String h, int l){
+    public Picture(String f, String cap, String com, String h, int l, 
+            LocalDateTime t){
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
+        time = t;
     }
     /**
      * Accessor method for file-path.
@@ -46,7 +51,6 @@ public class Picture
         return comments;
     }
     
-    
     /**
      * Accessor method for hashtags.
      * @return the hashtags of a picture
@@ -67,7 +71,7 @@ public class Picture
      * Increases the number of likes when the like button is clicked.
      * @return the new number of likes associated with a picture
      */
-    public int addLikes()
+    public int setLikes()
     {
         likes = likes + 1;
         return likes;
