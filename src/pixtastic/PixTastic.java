@@ -1,3 +1,5 @@
+package pixtastic;
+
 //Authors seth, rachel, tiffany
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +17,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import java.time.LocalDate;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 public class PixTastic extends Application
 {
@@ -26,14 +33,57 @@ public class PixTastic extends Application
     public static VBox topMenu;
     public static BorderPane borderPane;*/
     
+   /* public static Connection con;
     
-    
+    public static void pushtoDB(int newID, String uName, String name, String loc,
+            String profileP, String biography){
+        try{
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
+            String sql = "SELECT * FROM PIXUSERS";
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            //stmt.last();
+            rs.moveToInsertRow();
+            rs.updateInt("ID", newID);
+            //rs.moveToInsertRow();
+            rs.updateString("Username", uName);
+            rs.updateString("Name", name);
+            rs.updateString("Location", loc);
+            rs.updateString("Profile_Pix", profileP);
+            rs.updateString("Bio", biography);
+            
+            rs.insertRow();
+            stmt.close();
+            rs.close();
+            
+            
+            
+          
+        }
+        catch(SQLException error){
+            System.out.println(error.getMessage());
+        }
+    }
+    */
     public static void main(String[] args)
     {
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
+        //launch(args);
+        
+       /* try{
+        String host = "jdbc:derby://localhost:1527/PixTastic";
+        String username = "test";
+        String password = "test";
+        
+        con = DriverManager.getConnection( host, username, password );
+       
+        }
+        catch(SQLException error){
+            System.out.println(error.getMessage());
+        }
+        */
         launch(args);
     }
-    
     @Override
     public void start(Stage window)
     {

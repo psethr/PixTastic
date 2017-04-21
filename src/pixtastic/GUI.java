@@ -1,3 +1,7 @@
+package pixtastic;
+
+
+import pixtastic.PixTastic;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,12 +15,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 public class GUI
 {
     private static Stage alertBoxStage, confirmBoxStage;
     private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo,
-            createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack;
+            createAccountButton, createAccountButtonGoBack, loginButton, loginButtonGoBack;
     private static Label alertBoxLabel, confirmBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName;
     private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
@@ -38,6 +51,16 @@ public class GUI
     public static VBox topMenu;
     public static BorderPane borderPane;
     
+    public static int idCounter = 4;
+    public static int newID = 0;
+    public static String id;
+    public static String uName;
+    public static String name;
+    public static String loc;
+    public static String profileP;
+    public static String biography;
+    
+    
     public static void startProgram(Stage window)
     {
         GUI.window = window;
@@ -58,6 +81,9 @@ public class GUI
         closeButton = new Button();
         closeButton.setText("Close Program");
         closeButton.setOnAction(new EventHandler<ActionEvent>() {
+            
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("PixTasticPU");
+
             @Override
             public void handle(ActionEvent event)
                 {
@@ -185,23 +211,43 @@ public class GUI
                 + "Biography: ");
         createAccountInfo2Label.setFont(Font.font("arial", 15));
         
-        createAccoutButtonGoBack = new Button("Go Back");
-        createAccoutButtonGoBack.setOnAction(e -> {
+        createAccountButtonGoBack = new Button("Go Back");
+        createAccountButtonGoBack.setOnAction(e -> {
             startProgram(window);
         });
         createAccountButton = new Button("Create Account");
+        createAccountButton.setOnAction(e -> {
+            Pixusers p1 = new Pixusers();
+            p1.setUsername(createAccountTextFieldUsername.getText());
+            p1.setFullname(createAccountTextFieldName.getText());
+            p1.setLocation(createAccountTextFieldLocation.getText());
+            p1.setProfilePix(createAccountTextFieldProfilePic.getText());
+            p1.setBio(createAccountTextFieldBiography.getText());
+            
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("PixTasticPU");
+            PixusersJpaController pjc = new PixusersJpaController(emf);
+            pjc.create(p1);
+            
+            ShowUsers su = new ShowUsers();
+            su.setVisible(true);
+        });
         
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
         createAccountTextFieldUsername.setPromptText("What others will see you as");
+        //uName = createAccountTextFieldUsername.getText();
         createAccountTextFieldName = new TextField();
         createAccountTextFieldName.setPromptText("Your actual name");
+        //name = createAccountTextFieldName.getText();
         createAccountTextFieldLocation = new TextField();
         createAccountTextFieldLocation.setPromptText("e.g. Virginia");
+        //loc = createAccountTextFieldLocation.getText();
         createAccountTextFieldProfilePic = new TextField();
         createAccountTextFieldProfilePic.setPromptText("e.g. C:\\\\Windows\\Folder");
+        //profileP = createAccountTextFieldProfilePic.getText();
         createAccountTextFieldBiography = new TextField();
         createAccountTextFieldBiography.setPromptText("Enter multiple sentences about yourself");
+        //biography = createAccountTextFieldBiography.getText();
         
         createAccountVBoxCenter = new VBox(25);
         createAccountVBoxCenter.setAlignment(Pos.CENTER);
@@ -210,7 +256,7 @@ public class GUI
         
         createAccountHBoxBottom = new HBox(400);
         createAccountHBoxBottom.setAlignment(Pos.CENTER);
-        createAccountHBoxBottom.getChildren().addAll(createAccoutButtonGoBack, createAccountButton);
+        createAccountHBoxBottom.getChildren().addAll(createAccountButtonGoBack, createAccountButton);
         createAccountHBoxCenter = new HBox(250);
         createAccountHBoxCenter.setAlignment(Pos.CENTER);
         createAccountHBoxCenter.getChildren().addAll(createAccountInfo2Label, createAccountVBoxCenter);
