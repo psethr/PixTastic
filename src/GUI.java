@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -5,6 +8,7 @@ import javafx.geometry.*;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -14,15 +18,16 @@ import javafx.stage.*;
 public class GUI
 {
     private static Stage alertBoxStage, confirmBoxStage;
-    private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene;
+    private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene, profileScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo,
             createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack;
     private static Label alertBoxLabel, confirmBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
-            createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName;
+            createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
+            profileLabelInfo, profileLabelFeed;
     private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
-            createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom;
+            createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
-            loginHBoxBottom;
+            loginHBoxBottom, profileHBox;
     private static TextField createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
     private static BorderPane createAccountBorderPane, loginBorderPane;
@@ -190,7 +195,9 @@ public class GUI
             startProgram(window);
         });
         createAccountButton = new Button("Create Account");
-        
+        createAccountButton.setOnAction(e -> {
+            Profile();
+        });
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
         createAccountTextFieldUsername.setPromptText("What others will see you as");
@@ -282,5 +289,38 @@ public class GUI
         
         GUI.window.setScene(loginScene);
         GUI.window.show();
+    }
+    
+    public static void Profile()
+    {
+        profileLabelTitle = new Label("Your Profile");
+        profileLabelTitle.setFont(Font.font("arial", 40));
+        profileLabelInfo = new Label("Name:\n\nUsername:\n\nLocation:\n\nBiography:");
+        profileLabelInfo.setFont(Font.font("arial", 30));
+        profileLabelFeed = new Label("Personal Feed");
+        profileLabelFeed.setFont(Font.font("arial", 30));
+        
+        File pic = new File("C:/Users/Seth/Desktop/CPSC 240/Group Project Pictures/images.jpg");
+        ImageView image = new ImageView(pic.toURI().toString());
+        image.setFitHeight(100);
+        image.setFitWidth(100);
+        
+        image.setOnMouseClicked(e -> window.setScene(startPage));
+        
+        profileVBoxTop = new VBox(100);
+        profileVBoxTop.setAlignment(Pos.CENTER_LEFT);
+        profileVBoxTop.getChildren().addAll(profileLabelTitle, profileLabelInfo, profileLabelFeed);
+        
+        profileHBox = new HBox(300);
+        profileHBox.setAlignment(Pos.TOP_LEFT);
+        profileHBox.getChildren().addAll(profileVBoxTop, image);
+        
+        profileVBox = new VBox();
+        profileVBox.setPadding(new Insets(10));
+        profileVBox.getChildren().addAll(profileHBox);
+        
+        profileScene = new Scene(profileVBox, 1000, 900);
+        
+        GUI.window.setScene(profileScene);
     }
 }
