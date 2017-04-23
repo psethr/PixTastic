@@ -200,7 +200,7 @@ public class GUI
                                                     createAccountTextFieldProfilePic.getText(),
                                                     createAccountTextFieldBiography.getText(),
                                                     true,
-                                                    true)
+                                                    true);
             PixTastic.registeredUserAL.add(user);
             Profile(user);
         });
