@@ -1,7 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -42,6 +39,7 @@ public class GUI
     public static HBox centerMenu, bottomMenu, topMenu1;
     public static VBox topMenu;
     public static BorderPane borderPane;
+    
     
     public static void startProgram(Stage window)
     {
@@ -196,7 +194,15 @@ public class GUI
         });
         createAccountButton = new Button("Create Account");
         createAccountButton.setOnAction(e -> {
-            Profile();
+            RegisteredUser user = new RegisteredUser(createAccountTextFieldUsername.getText(),
+                                                    createAccountTextFieldName.getText(),
+                                                    createAccountTextFieldLocation.getText(),
+                                                    createAccountTextFieldProfilePic.getText(),
+                                                    createAccountTextFieldBiography.getText(),
+                                                    true,
+                                                    true)
+            PixTastic.registeredUserAL.add(user);
+            Profile(user);
         });
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
@@ -291,16 +297,17 @@ public class GUI
         GUI.window.show();
     }
     
-    public static void Profile()
+    public static void Profile(RegisteredUser user)
     {
         profileLabelTitle = new Label("Your Profile");
         profileLabelTitle.setFont(Font.font("arial", 40));
-        profileLabelInfo = new Label("Name:\n\nUsername:\n\nLocation:\n\nBiography:");
+        profileLabelInfo = new Label("Name:\t\t\t\t\t"+user.getName()+"\n\nUsername:\t\t\t\t"+user.getUsername()+
+                "\n\nLocation:\t\t\t\t\t"+user.getLocation()+"\n\nBiography:\t\t\t\t"+user.getBio());
         profileLabelInfo.setFont(Font.font("arial", 30));
         profileLabelFeed = new Label("Personal Feed");
         profileLabelFeed.setFont(Font.font("arial", 30));
         
-        File pic = new File("C:/Users/Seth/Desktop/CPSC 240/Group Project Pictures/images.jpg");
+        File pic = new File(user.getProfilePic());
         ImageView image = new ImageView(pic.toURI().toString());
         image.setFitHeight(100);
         image.setFitWidth(100);
@@ -309,6 +316,7 @@ public class GUI
         
         profileVBoxTop = new VBox(100);
         profileVBoxTop.setAlignment(Pos.CENTER_LEFT);
+        profileVBoxTop.setMinWidth(900);
         profileVBoxTop.getChildren().addAll(profileLabelTitle, profileLabelInfo, profileLabelFeed);
         
         profileHBox = new HBox(300);

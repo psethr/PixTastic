@@ -34,6 +34,11 @@ public class Picture
     {
         return filepath;
     }
+    
+    public void setFPath(String path)
+    {
+        filepath = path;
+    }
     /**
      * Accessor method for the caption.
      * @return the caption of a picture
@@ -41,6 +46,11 @@ public class Picture
     public String getCaption()
     {
         return caption;
+    }
+    
+    public void setCaptions(String captions)
+    {
+        this.caption = captions;
     }
     /**
      * Accessor method for comments.
@@ -51,6 +61,10 @@ public class Picture
         return comments;
     }
     
+    public void setComments(String comments)
+    {
+       this.comments = comments;
+    }
     /**
      * Accessor method for hashtags.
      * @return the hashtags of a picture
@@ -58,6 +72,11 @@ public class Picture
     public String getHashtag()
     {
         return hashtag;
+    }
+    
+    public void setHashtag(String tag)
+    {
+        hashtag = tag;
     }
     /**
      * Accessor method for likes.

@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 public class PixTastic extends Application
@@ -27,9 +28,10 @@ public class PixTastic extends Application
     public static BorderPane borderPane;*/
     
     
-    
+    public static ArrayList<RegisteredUser> registeredUserAL;
     public static void main(String[] args)
     {
+        registeredUserAL = new ArrayList<>();
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
         launch(args);
     }
