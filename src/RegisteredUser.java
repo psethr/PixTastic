@@ -19,7 +19,8 @@ public class RegisteredUser
             String location,
             String profilePic,
             String bio,
-            boolean isRegistered)
+           boolean isRegistered)
+    
     {
         this.username = username;
         this.name = name;

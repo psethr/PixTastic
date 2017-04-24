@@ -27,14 +27,14 @@ public class PixTastic extends Application
    public static String profilePic;
    public static String bio;
    public static int numUsers = 0;
-   public static ArrayList<RegisteredUser> registeredUserAL;
+   public static ArrayList<RegisteredUser> registeredUserAL = new ArrayList<RegisteredUser>();
    
    public static void main(String[] args)
     {
         
         Scanner in = new Scanner(System.in);
         Scanner f = null;
-        String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt.txt";
+        String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt";
         String line = "";
     try
     {  
@@ -45,10 +45,15 @@ public class PixTastic extends Application
            { 
              String[] inputSplit = line.split("(?<=\") *(?=\")");  
              username = inputSplit[0];
+             System.out.println(" " + username);
              name = inputSplit[1];
+             System.out.println(" " + name);
              location = inputSplit[2];
+             System.out.println(" " + location);
              profilePic = inputSplit[3];
+             System.out.println(" " + profilePic);
              bio = inputSplit[4];
+             System.out.println(" " + bio);
             
              RegisteredUser user = new RegisteredUser(username, name, location, profilePic, bio, true); 
              registeredUserAL.add(user);
