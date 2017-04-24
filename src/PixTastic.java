@@ -43,20 +43,21 @@ public class PixTastic extends Application
         user1.addPicture(pic4);
         user1.addPicture(pic5);
         RegisteredUser user2 = new RegisteredUser("BoBBY_cool","Bob Peason","Your Mom","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","Im an alcoholic who doesn't care.",true);
+        GUI.userLoggedIn = user2;
         Picture pic11 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\food2.jpg","Food is good!","blah","#food",12);
         Picture pic22 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\car1.jpg","My dream car!","","#never",130);
         Picture pic33 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\homework1.jpg","F@#K school!","blah2","#umw",16);
         Picture pic44 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\gym1.jpg","Pumping iron","","#Swoll",10);
         Picture pic55 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\movie1.jpg","I loe movies!","","#cantwait",10);
-        user1.addPicture(pic11);
-        user1.addPicture(pic22);
-        user1.addPicture(pic33);
-        user1.addPicture(pic44);
-        user1.addPicture(pic55);
+        user2.addPicture(pic11);
+        user2.addPicture(pic22);
+        user2.addPicture(pic33);
+        user2.addPicture(pic44);
+        user2.addPicture(pic55);
+        user2.addFollower(user1);
         registeredUserAL = new ArrayList<>();
         registeredUserAL.add(user1);
         registeredUserAL.add(user2);
-        GUI.userLoggedIn = user2;
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
         launch(args);
     }

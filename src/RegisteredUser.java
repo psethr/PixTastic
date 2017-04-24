@@ -164,14 +164,14 @@ public class RegisteredUser
         {
             for (Picture ele : al)
             {
-                s += ele.getFPath()+"  :  ";
+                s += ele.getFPath()+",  ";
             }
         }
         else if (list.equalsIgnoreCase("follower"))
         {
             for (RegisteredUser ele : alFollowing)
             {
-                s += ele.getUsername()+"  :  ";
+                s += ele.getUsername()+",  ";
             }
         }
         return s;

@@ -1,4 +1,5 @@
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -15,23 +16,23 @@ import javafx.stage.*;
 public class GUI
 {
     private static Stage alertBoxStage, confirmBoxStage;
-    private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene, profileScene;
+    private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene, profileScene, pictureScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo,
             createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack, profileButtonFollow,
-            profileButtonMainFeed;
+            profileButtonMainFeed, pictureButtonLike, pictureButtonComment;
     private static Label alertBoxLabel, confirmBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
-            profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow;
+            profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow, pictureLabelInfo, pictureLabelInfo2, 
+            pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3;
     private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
-            profileVBoxFeed;
+            profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
-            loginHBoxBottom, profileHBox, profileHBox2;
+            loginHBoxBottom, profileHBox, profileHBox2, pictureHBoxTop, pictureHBoxUser, pictureHBoxLike, pictureHBoxComment;
     private static TextField createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
     private static BorderPane createAccountBorderPane, loginBorderPane;
-    
-    private static ScrollPane profileScrollPane, profileScrollPane2;
+    private static ScrollPane profileScrollPane, profileScrollPane2, pictureScrollPaneComments;
     
     private static boolean comfirmBoxAnswer;
     public static RegisteredUser userLoggedIn;
@@ -205,7 +206,8 @@ public class GUI
                                                     createAccountTextFieldBiography.getText(),
                                                     true);
             PixTastic.registeredUserAL.add(user);
-            Profile(PixTastic.registeredUserAL.get(0));
+            GUI.userLoggedIn = user;
+            Profile(PixTastic.registeredUserAL.get(1));
         });
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
@@ -306,7 +308,8 @@ public class GUI
         profileLabelTitle.setFont(Font.font("arial", 40));
         System.out.println(user.getBio());
         profileLabelInfo = new Label("Name:\t\t\t\t\t"+user.getName()+"\n\nUsername:\t\t\t\t"+user.getUsername()+
-                "\n\nLocation:\t\t\t\t\t"+user.getLocation()+"\n\nBiography:\t\t\t\t"+user.getBio());
+                "\n\nLocation:\t\t\t\t\t"+user.getLocation()+"\n\nFollowing:\t\t\t\t"+user.toString("follower")+
+                "\n\nBiography:\t\t\t\t"+user.getBio());
         profileLabelInfo.setFont(Font.font("arial", 30));
         profileLabelFeed = new Label("Personal Feed");
         profileLabelFeed.setFont(Font.font("arial", 30));
@@ -354,7 +357,7 @@ public class GUI
             ImageView photo = new ImageView(f.toURI().toString());
             photo.setFitHeight(400);
             photo.setFitWidth(400);
-            photo.setOnMouseClicked(e -> PicturePost(user, ele));
+            photo.setOnMouseClicked(e -> PicturePost(ele));
             profileVBoxFeed.getChildren().add(photo);
             ct++;
         }
@@ -385,9 +388,71 @@ public class GUI
         GUI.window.setScene(profileScene);
     }
     
-    public static void PicturePost(RegisteredUser user, Picture pic)
+    public static void PicturePost(Picture pic)
     {
+        File f = new File(pic.getFPath());
+        ImageView image = new ImageView(f.toURI().toString());
+        image.setFitHeight(450);
+        image.setFitWidth(450);
         
+        pictureLabelCaption = new Label(pic.getCaption());
+        pictureLabelCaption.setFont(Font.font("arial", 30));
+        pictureLabelInfo = new Label("Posted By:\t\t\t");
+        pictureLabelInfo.setFont(Font.font("arial", 20));
+        pictureLabelInfo3 = new Label(pic.getOwner().getUsername());
+        pictureLabelInfo3.setFont(Font.font("arial", 20));
+        pictureLabelInfo3.setOnMouseClicked(e -> {
+            Profile(pic.getOwner());
+        });
+        pictureLabelInfo2 = new Label(
+        "Posted On:\t\t\t"+(pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy  @  hh:mm:ss")))+
+                "\n\nLikes:\t\t\t\t"+pic.getLikes()+"\n\nHashTag:\t\t\t\t"+pic.getHashtag());
+        pictureLabelInfo2.setFont(Font.font("arial", 20));
+        pictureLabelAlreadyLiked = new Label("You Have Already Liked this Picture!");
+        pictureLabelAlreadyLiked.setVisible(false);
+        pictureLabelComments = new Label("Comments");
+        pictureLabelComments.setFont(Font.font("arial", 30));
+        pictureLabelComments2 = new Label(pic.getComments());
+        pictureLabelComments2.setFont(Font.font("arial", 20));
+        
+        pictureScrollPaneComments = new ScrollPane();
+        pictureScrollPaneComments.setContent(pictureLabelComments2);
+        pictureScrollPaneComments.setMaxHeight(500);
+        
+        pictureButtonLike = new Button("Add a Like");
+        pictureButtonLike.setOnAction(e -> {
+            pic.addLikes(GUI.userLoggedIn);
+            GUI.AlertBox("Success!", "You have liked this picture!");
+            PicturePost(pic);
+        });
+        if (pic.getLikedBy().contains(GUI.userLoggedIn.getUsername()))
+        {
+            pictureButtonLike.setVisible(false);
+            pictureLabelAlreadyLiked.setVisible(true);
+        }
+        pictureButtonComment = new Button("Add a Comment");
+        
+        pictureHBoxLike = new HBox(15);
+        pictureHBoxLike.getChildren().addAll(pictureButtonLike, pictureLabelAlreadyLiked);
+        pictureHBoxUser = new HBox(0);
+        pictureHBoxUser.getChildren().addAll(pictureLabelInfo, pictureLabelInfo3);
+        pictureHBoxComment = new HBox(700);
+        pictureHBoxComment.getChildren().addAll(pictureLabelComments, pictureButtonComment);
+        
+        pictureVBoxInfoLike = new VBox(50);
+        pictureVBoxInfoLike.getChildren().addAll(pictureHBoxUser, pictureLabelInfo2, pictureHBoxLike);
+        pictureVBoxPicCap = new VBox(10);
+        pictureVBoxPicCap.getChildren().addAll(image, pictureLabelCaption);
+        
+        pictureHBoxTop = new HBox(50);
+        pictureHBoxTop.getChildren().addAll(pictureVBoxPicCap, pictureVBoxInfoLike);
+        
+        pictureVBox = new VBox(30);
+        pictureVBox.setPadding(new Insets(10));
+        pictureVBox.getChildren().addAll(pictureHBoxTop, pictureHBoxComment, pictureScrollPaneComments);
+        
+        pictureScene = new Scene(pictureVBox, 1000, 900);
+        GUI.window.setScene(pictureScene);
     }
     
     public static void Follow(RegisteredUser user)
