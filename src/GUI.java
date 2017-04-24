@@ -17,15 +17,16 @@ public class GUI
     private static Stage alertBoxStage, confirmBoxStage;
     private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene, profileScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo,
-            createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack;
+            createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack, profileButtonFollow,
+            profileButtonMainFeed;
     private static Label alertBoxLabel, confirmBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
-            profileLabelInfo, profileLabelFeed;
+            profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow;
     private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
             profileVBoxFeed;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
-            loginHBoxBottom, profileHBox;
+            loginHBoxBottom, profileHBox, profileHBox2;
     private static TextField createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
     private static BorderPane createAccountBorderPane, loginBorderPane;
@@ -33,7 +34,7 @@ public class GUI
     private static ScrollPane profileScrollPane, profileScrollPane2;
     
     private static boolean comfirmBoxAnswer;
-    
+    public static RegisteredUser userLoggedIn;
     
     public static Stage window;
     public static Scene startPage;
@@ -98,7 +99,7 @@ public class GUI
         bottomMenu = new HBox();
         bottomMenu.setPadding(new Insets(10));
         bottomMenu.setAlignment(Pos.BOTTOM_RIGHT);
-        bottomMenu.setSpacing(600);
+        bottomMenu.setSpacing(575);
         bottomMenu.getChildren().addAll(author, closeButton);
         borderPane = new BorderPane();
         borderPane.setTop(topMenu);
@@ -202,7 +203,6 @@ public class GUI
                                                     createAccountTextFieldLocation.getText(),
                                                     createAccountTextFieldProfilePic.getText(),
                                                     createAccountTextFieldBiography.getText(),
-                                                    true,
                                                     true);
             PixTastic.registeredUserAL.add(user);
             Profile(PixTastic.registeredUserAL.get(0));
@@ -302,7 +302,7 @@ public class GUI
     
     public static void Profile(RegisteredUser user)
     {
-        profileLabelTitle = new Label("Your Profile");
+        profileLabelTitle = new Label(user.getUsername()+"'s Profile");
         profileLabelTitle.setFont(Font.font("arial", 40));
         System.out.println(user.getBio());
         profileLabelInfo = new Label("Name:\t\t\t\t\t"+user.getName()+"\n\nUsername:\t\t\t\t"+user.getUsername()+
@@ -310,6 +310,29 @@ public class GUI
         profileLabelInfo.setFont(Font.font("arial", 30));
         profileLabelFeed = new Label("Personal Feed");
         profileLabelFeed.setFont(Font.font("arial", 30));
+        profileLabelAlreadyFollow = new Label("You Are Following this User!");
+        profileLabelAlreadyFollow.setFont(Font.font("arial", 25));
+        profileLabelAlreadyFollow.setVisible(false);
+        
+        profileButtonFollow = new Button("Follow This Person?");
+        profileButtonMainFeed = new Button("Go to Main Feed");
+        if (userLoggedIn.getAlFollowing().contains(user))
+        {
+            profileLabelAlreadyFollow.setVisible(true);
+            profileButtonFollow.setVisible(false);
+        }
+        
+        if (userLoggedIn.equals(user))
+        {
+            profileButtonFollow.setVisible(false);
+        }
+        
+        profileButtonFollow.setOnAction(e -> {
+            Follow(user);
+            GUI.AlertBox("Success!", "You are now following this user!");
+            Profile(user);
+            System.out.println(userLoggedIn.toString("follower"));
+        });
         
         File pic = new File(user.getProfilePic());
         ImageView image = new ImageView(pic.toURI().toString());
@@ -321,6 +344,7 @@ public class GUI
         profileScrollPane = new ScrollPane();
         profileScrollPane.setMaxHeight(400);
         profileVBoxFeed = new VBox(10);
+        profileVBoxFeed.setAlignment(Pos.CENTER_RIGHT);
         profileVBoxFeed.setPadding(new Insets(10));
         int ct = 0;
         for (Picture ele : user.getArraylist())
@@ -330,35 +354,44 @@ public class GUI
             ImageView photo = new ImageView(f.toURI().toString());
             photo.setFitHeight(400);
             photo.setFitWidth(400);
-            photo.setOnMouseClicked(e -> PicturePost(ele));
+            photo.setOnMouseClicked(e -> PicturePost(user, ele));
             profileVBoxFeed.getChildren().add(photo);
             ct++;
         }
         profileScrollPane.setContent(profileVBoxFeed);
         System.out.println(profileVBoxFeed.toString());
+        
+        profileHBox2 = new HBox(25);
+        profileHBox2.setAlignment(Pos.CENTER_RIGHT);
+        profileHBox2.getChildren().addAll(profileButtonMainFeed, profileLabelAlreadyFollow, profileButtonFollow);
+        
         profileVBoxTop = new VBox(50);
         profileVBoxTop.setAlignment(Pos.CENTER_LEFT);
-        profileVBoxTop.getChildren().addAll(profileLabelTitle, profileScrollPane2, profileLabelFeed);
+        profileVBoxTop.getChildren().addAll(profileLabelTitle, profileScrollPane2, profileHBox2, profileLabelFeed);
         
         profileHBox = new HBox(10);
         profileHBox.setAlignment(Pos.TOP_LEFT);
         profileHBox.getChildren().addAll(profileVBoxTop, image);
         
+//        profileHBox2 = new HBox(100);
+//        profileHBox2.setAlignment(Pos.CENTER_RIGHT);
+//        profileHBox2.getChildren().addAll(profileLabelAlreadyFollow, profileButtonFollow);
+        
         profileVBox = new VBox(10);
         profileVBox.setPadding(new Insets(10));
-        profileVBox.getChildren().addAll(profileHBox, profileScrollPane);
+        profileVBox.getChildren().addAll(profileHBox, profileScrollPane, bottomMenu);
         
         profileScene = new Scene(profileVBox, 1000, 900);
         GUI.window.setScene(profileScene);
     }
     
-    public static void PicturePost(Picture pic)
+    public static void PicturePost(RegisteredUser user, Picture pic)
     {
         
     }
     
-    public static void Followers(RegisteredUser user)
+    public static void Follow(RegisteredUser user)
     {
-        
+        GUI.userLoggedIn.addFollower(user);
     }
 }

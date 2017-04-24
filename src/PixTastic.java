@@ -31,19 +31,32 @@ public class PixTastic extends Application
     public static ArrayList<RegisteredUser> registeredUserAL;
     public static void main(String[] args)
     {
-        RegisteredUser user1 = new RegisteredUser("seth77","Seth Perts","Virginia","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","I go to school at UMW. My favorite color is blue. My favorite football team is the steelers. Go Pittsburgh!",true,true);
+        RegisteredUser user1 = new RegisteredUser("seth77","Seth Perts","Virginia","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","I go to school at UMW. My favorite color is blue. My favorite football team is the steelers. Go Pittsburgh!",true);
         Picture pic1 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\cat1.jpg","I love my cat!","blah","#cats",10);
-        Picture pic2 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\cat2.jpg","My cat is the cutest!","blaher","",10);
-        Picture pic3 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\umw1.jpg","My school rocks!","blah2","#umw",10);
-        Picture pic4 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\food1.jpg","Yum!","blah3","",10);
+        Picture pic2 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\cat2.jpg","My cat is the cutest!","blaher","",410);
+        Picture pic3 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\umw1.jpg","My school rocks!","blah2","#umw",105);
+        Picture pic4 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\food1.jpg","Yum!","blah3","",102);
         Picture pic5 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\football1.jpg","Go football!","blah5","",10);
         user1.addPicture(pic1);
         user1.addPicture(pic2);
         user1.addPicture(pic3);
         user1.addPicture(pic4);
         user1.addPicture(pic5);
+        RegisteredUser user2 = new RegisteredUser("BoBBY_cool","Bob Peason","Your Mom","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","Im an alcoholic who doesn't care.",true);
+        Picture pic11 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\food2.jpg","Food is good!","blah","#food",12);
+        Picture pic22 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\car1.jpg","My dream car!","","#never",130);
+        Picture pic33 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\homework1.jpg","F@#K school!","blah2","#umw",16);
+        Picture pic44 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\gym1.jpg","Pumping iron","","#Swoll",10);
+        Picture pic55 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\movie1.jpg","I loe movies!","","#cantwait",10);
+        user1.addPicture(pic11);
+        user1.addPicture(pic22);
+        user1.addPicture(pic33);
+        user1.addPicture(pic44);
+        user1.addPicture(pic55);
         registeredUserAL = new ArrayList<>();
         registeredUserAL.add(user1);
+        registeredUserAL.add(user2);
+        GUI.userLoggedIn = user2;
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
         launch(args);
     }
