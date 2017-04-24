@@ -15,6 +15,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 
 public class PixTastic extends Application
@@ -29,10 +32,49 @@ public class PixTastic extends Application
     
     
     public static ArrayList<RegisteredUser> registeredUserAL;
+    public static String username;
+    public static String name;
+    public static String location;
+    public static String profilePic;
+    public static String bio;
+    public static int numUsers = 0;
+   
     public static void main(String[] args)
     {
         registeredUserAL = new ArrayList<>();
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
+
+        Scanner in = new Scanner(System.in);
+        Scanner f = null;
+        String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt.txt";
+        String line = "";
+    try
+    {  
+           FileReader fileReader = new FileReader(fileUsers);
+           BufferedReader bufferedReader = new BufferedReader(fileReader);
+           
+           while((line = bufferedReader.readLine()) != null)
+           { 
+             String[] inputSplit = line.split("(?<=\") *(?=\")");  
+             username = inputSplit[0];
+             name = inputSplit[1];
+             location = inputSplit[2];
+             profilePic = inputSplit[3];
+             bio = inputSplit[4];
+            
+             RegisteredUser user = new RegisteredUser(username, name, location, profilePic, bio, true, false); 
+             registeredUserAL.add(user);
+             numUsers++;
+             //System.out.println(" " + registeredUserAL);
+           }
+           bufferedReader.close();
+    }
+        
+    catch (IOException e) 
+    {
+            System.err.println("Caught IOException: " + e.getMessage());
+    }
+
         launch(args);
     }
     
