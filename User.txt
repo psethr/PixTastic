@@ -1,0 +1,3 @@
+"HappyCat" "Katie Holmes" "California" "C:/Users/Rachel/Documents/PixTastic/HappyCatprofile.jpg" "Cats are my life"
+"DogCrazy" "John Smith" "Florida" "C:/Users/Rachel/Documents/PixTastic/DogCrazyprofile.jpg" "So glad to have man's best friend in my life!"
+"MusicIsLife" "Liza Miranova" "Pittsburgh" "C:/Users/Rachel/Documents/PixTastic/MusicIsLifeprofile.jpeg" "Music says all the things that words cannot"
