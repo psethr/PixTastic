@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Picture
 {
@@ -17,14 +18,14 @@ public class Picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
     */
-    public Picture(String f, String cap, String com, String h, int l, 
-            LocalDateTime t){
+    public Picture(String f, String cap, String com, String h, int l)
+    {
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
-        time = t;
+        time = LocalDateTime.now();
     }
     /**
      * Accessor method for file-path.

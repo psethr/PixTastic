@@ -22,12 +22,15 @@ public class GUI
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
             profileLabelInfo, profileLabelFeed;
     private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
-            createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop;
+            createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
+            profileVBoxFeed;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
             loginHBoxBottom, profileHBox;
     private static TextField createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
     private static BorderPane createAccountBorderPane, loginBorderPane;
+    
+    private static ScrollPane profileScrollPane, profileScrollPane2;
     
     private static boolean comfirmBoxAnswer;
     
@@ -39,7 +42,7 @@ public class GUI
     public static HBox centerMenu, bottomMenu, topMenu1;
     public static VBox topMenu;
     public static BorderPane borderPane;
-    
+   
     
     public static void startProgram(Stage window)
     {
@@ -202,7 +205,7 @@ public class GUI
                                                     true,
                                                     true);
             PixTastic.registeredUserAL.add(user);
-            Profile(user);
+            Profile(PixTastic.registeredUserAL.get(0));
         });
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
@@ -301,6 +304,7 @@ public class GUI
     {
         profileLabelTitle = new Label("Your Profile");
         profileLabelTitle.setFont(Font.font("arial", 40));
+        System.out.println(user.getBio());
         profileLabelInfo = new Label("Name:\t\t\t\t\t"+user.getName()+"\n\nUsername:\t\t\t\t"+user.getUsername()+
                 "\n\nLocation:\t\t\t\t\t"+user.getLocation()+"\n\nBiography:\t\t\t\t"+user.getBio());
         profileLabelInfo.setFont(Font.font("arial", 30));
@@ -309,26 +313,52 @@ public class GUI
         
         File pic = new File(user.getProfilePic());
         ImageView image = new ImageView(pic.toURI().toString());
-        image.setFitHeight(100);
-        image.setFitWidth(100);
+        image.setFitHeight(200);
+        image.setFitWidth(200);
         
-        image.setOnMouseClicked(e -> window.setScene(startPage));
-        
-        profileVBoxTop = new VBox(100);
+        profileScrollPane2 = new ScrollPane();
+        profileScrollPane2.setContent(profileLabelInfo);
+        profileScrollPane = new ScrollPane();
+        profileScrollPane.setMaxHeight(400);
+        profileVBoxFeed = new VBox(10);
+        profileVBoxFeed.setPadding(new Insets(10));
+        int ct = 0;
+        for (Picture ele : user.getArraylist())
+        {
+            int len = user.getArraylist().size();
+            File f = new File(ele.getFPath());
+            ImageView photo = new ImageView(f.toURI().toString());
+            photo.setFitHeight(400);
+            photo.setFitWidth(400);
+            photo.setOnMouseClicked(e -> PicturePost(ele));
+            profileVBoxFeed.getChildren().add(photo);
+            ct++;
+        }
+        profileScrollPane.setContent(profileVBoxFeed);
+        System.out.println(profileVBoxFeed.toString());
+        profileVBoxTop = new VBox(50);
         profileVBoxTop.setAlignment(Pos.CENTER_LEFT);
-        profileVBoxTop.setMinWidth(900);
-        profileVBoxTop.getChildren().addAll(profileLabelTitle, profileLabelInfo, profileLabelFeed);
+        profileVBoxTop.getChildren().addAll(profileLabelTitle, profileScrollPane2, profileLabelFeed);
         
-        profileHBox = new HBox(300);
+        profileHBox = new HBox(10);
         profileHBox.setAlignment(Pos.TOP_LEFT);
         profileHBox.getChildren().addAll(profileVBoxTop, image);
         
-        profileVBox = new VBox();
+        profileVBox = new VBox(10);
         profileVBox.setPadding(new Insets(10));
-        profileVBox.getChildren().addAll(profileHBox);
+        profileVBox.getChildren().addAll(profileHBox, profileScrollPane);
         
         profileScene = new Scene(profileVBox, 1000, 900);
-        
         GUI.window.setScene(profileScene);
+    }
+    
+    public static void PicturePost(Picture pic)
+    {
+        
+    }
+    
+    public static void Followers(RegisteredUser user)
+    {
+        
     }
 }
