@@ -17,22 +17,26 @@ import javafx.stage.*;
 
 public class GUI
 {
-    private static Stage alertBoxStage, confirmBoxStage, entryBoxStage;
-    private static Scene alertBoxScene, confirmBoxScene, entryBoxScene, createAccountScene, loginScene, profileScene, pictureScene;
+    private static Stage alertBoxStage, confirmBoxStage, entryBoxStage, createPictureStage;
+    private static Scene alertBoxScene, confirmBoxScene, entryBoxScene, createAccountScene, loginScene, profileScene, pictureScene,
+            createPictureScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo, entryBoxButton,
             createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack, profileButtonFollow,
-            profileButtonMainFeed, pictureButtonLike, pictureButtonComment;
+            profileButtonMainFeed, profileButtonCreatePicture, pictureButtonLike, pictureButtonComment, createPictureButton, createPictureButtonGoBack;
     private static Label alertBoxLabel, confirmBoxLabel, entryBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
             profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow, pictureLabelInfo, pictureLabelInfo2, 
-            pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3;
+            pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3,
+            createPictureLabelTitle, createPictureLabelInfo, createPictureLabelInfo1;
     private static VBox alertBoxVBox, confirmBoxVBox, entryBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
-            profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox;
+            profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox, createPictureVBox, createPictureVBoxTextField;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
-            loginHBoxBottom, profileHBox, profileHBox2, pictureHBoxTop, pictureHBoxUser, pictureHBoxLike, pictureHBoxComment;
+            loginHBoxBottom, profileHBox, profileHBox2, pictureHBoxTop, pictureHBoxUser, pictureHBoxLike, pictureHBoxComment,
+            createPictureHBoxInfo, createPictureHBoxButton;
     private static TextField entryBoxTextField, createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
-            createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
+            createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName, createPictureTextFieldFile,
+            createPictureTextFieldCaption, createTextFieldHashtag;
     private static BorderPane createAccountBorderPane, loginBorderPane;
     private static ScrollPane profileScrollPane, profileScrollPane2, pictureScrollPaneComments;
     
@@ -359,7 +363,6 @@ public class GUI
     {
         profileLabelTitle = new Label(user.getUsername()+"'s Profile");
         profileLabelTitle.setFont(Font.font("arial", 40));
-        System.out.println(user.getBio());
         profileLabelInfo = new Label("Name:\t\t\t\t\t"+user.getName()+"\n\nUsername:\t\t\t\t"+user.getUsername()+
                 "\n\nLocation:\t\t\t\t\t"+user.getLocation()+"\n\nFollowing:\t\t\t\t"+user.toString("follower")+
                 "\n\nBiography:\t\t\t\t"+user.getBio());
@@ -372,6 +375,7 @@ public class GUI
         
         profileButtonFollow = new Button("Follow This Person?");
         profileButtonMainFeed = new Button("Go to Main Feed");
+        profileButtonCreatePicture = new Button("Create a New Post");
      
         System.out.println(userLoggedIn.getAlFollowing().contains(user));
             
@@ -390,7 +394,10 @@ public class GUI
             Follow(user);
             GUI.AlertBox("Success!", "You are now following this user!");
             Profile(user);
-            System.out.println(userLoggedIn.toString("follower"));
+        });
+        
+        profileButtonCreatePicture.setOnAction(e -> {
+            CreatePicture();
         });
         
         File pic = new File(user.getProfilePic());
@@ -415,11 +422,10 @@ public class GUI
             profileVBoxFeed.getChildren().add(photo);
         }
         profileScrollPane.setContent(profileVBoxFeed);
-        System.out.println(profileVBoxFeed.toString());
         
         profileHBox2 = new HBox(25);
         profileHBox2.setAlignment(Pos.CENTER_RIGHT);
-        profileHBox2.getChildren().addAll(profileButtonMainFeed, profileLabelAlreadyFollow, profileButtonFollow);
+        profileHBox2.getChildren().addAll(profileButtonCreatePicture, profileButtonMainFeed, profileLabelAlreadyFollow, profileButtonFollow);
         
         profileVBoxTop = new VBox(50);
         profileVBoxTop.setAlignment(Pos.CENTER_LEFT);
@@ -482,7 +488,6 @@ public class GUI
         pictureButtonComment = new Button("Add a Comment");
         pictureButtonComment.setOnAction(e -> {
             String ans = GUI.EntryBox("Comment", "Enter a comment to post to this picture.", "Post Comment");
-            System.out.println(GUI.userLoggedIn.getUsername()+"test");
             ans = GUI.userLoggedIn.getUsername()+" ("+LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))+" )  --  "+ans;
             pic.addComments(ans);
             PicturePost(pic);
@@ -514,5 +519,71 @@ public class GUI
     public static void Follow(RegisteredUser user)
     {
         GUI.userLoggedIn.addFollower(user);
+    }
+    
+    public static void CreatePicture()
+    {
+        createPictureStage = new Stage();
+        createPictureStage.setTitle("Create a Picture Post");
+        createPictureStage.initModality(Modality.APPLICATION_MODAL);
+        
+        createPictureLabelTitle = new Label("Create a Picture Post");
+        createPictureLabelTitle.setFont(Font.font("arial", 40));
+        createPictureLabelTitle.setAlignment(Pos.CENTER_LEFT);
+        createPictureLabelInfo = new Label("Enter the following information:");
+        createPictureLabelInfo.setFont(Font.font("arial", 25));
+        createPictureLabelInfo.setAlignment(Pos.CENTER_LEFT);
+        createPictureLabelInfo1 = new Label(
+        "File Pathway:\n\nCaption:\n\nHashTag:\n\n");
+        createPictureLabelInfo1.setFont(Font.font("arial", 20));
+        createPictureLabelInfo1.setAlignment(Pos.CENTER);
+        
+        createPictureTextFieldFile = new TextField();
+        createPictureTextFieldFile.setPromptText("e.g. C:\\\\Windows\\Folder");
+        createPictureTextFieldFile.setMinWidth(350);
+        createPictureTextFieldCaption = new TextField();
+        createPictureTextFieldCaption.setPromptText("Enter a brief description");
+        createTextFieldHashtag = new TextField();
+        createTextFieldHashtag.setPromptText("Enter a searchable hashtag e.g #food");
+        
+        createPictureButton = new Button("Create Picture Post");
+        createPictureButton.setOnAction(e -> {
+            System.out.println("test1");
+            Picture pic = new Picture(createPictureTextFieldFile.getText(),
+                                      createPictureTextFieldCaption.getText(),
+                                      "",
+                                      createTextFieldHashtag.getText(),
+                                      0);
+            System.out.println("test2");
+            GUI.userLoggedIn.addPicture(pic);
+            System.out.println("Test3");
+            Profile(GUI.userLoggedIn);
+            System.out.println("test4");
+            createPictureStage.close();
+        });
+        createPictureButtonGoBack = new Button("Go Back");
+        createPictureButtonGoBack.setOnAction(e -> {
+            Profile(GUI.userLoggedIn);
+            createPictureStage.close();
+        });
+        
+        createPictureVBoxTextField = new VBox(20);
+        createPictureVBoxTextField.setAlignment(Pos.CENTER);
+        createPictureVBoxTextField.getChildren().addAll(createPictureTextFieldFile, createPictureTextFieldCaption, createTextFieldHashtag);
+        
+        createPictureHBoxInfo = new HBox(150);
+        createPictureHBoxInfo.setAlignment(Pos.CENTER);
+        createPictureHBoxInfo.getChildren().addAll(createPictureLabelInfo1, createPictureVBoxTextField);
+        createPictureHBoxButton = new HBox(600);
+        createPictureHBoxButton.getChildren().addAll(createPictureButtonGoBack, createPictureButton);
+        
+        createPictureVBox = new VBox(50);
+        createPictureVBox.setPadding(new Insets(10));
+        createPictureVBox.getChildren().addAll(createPictureLabelTitle, createPictureLabelInfo, createPictureHBoxInfo, createPictureHBoxButton);
+        
+        createPictureScene = new Scene(createPictureVBox);
+        
+        createPictureStage.setScene(createPictureScene);
+        createPictureStage.showAndWait();
     }
 }
