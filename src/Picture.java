@@ -67,7 +67,7 @@ public class Picture
         return comments;
     }
     
-    public void setComments(String comments)
+    public void addComments(String comments)
     {
        this.comments = comments;
     }

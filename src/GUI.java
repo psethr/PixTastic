@@ -1,5 +1,7 @@
 import java.io.File;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -15,26 +17,27 @@ import javafx.stage.*;
 
 public class GUI
 {
-    private static Stage alertBoxStage, confirmBoxStage;
-    private static Scene alertBoxScene, confirmBoxScene, createAccountScene, loginScene, profileScene, pictureScene;
-    private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo,
+    private static Stage alertBoxStage, confirmBoxStage, entryBoxStage;
+    private static Scene alertBoxScene, confirmBoxScene, entryBoxScene, createAccountScene, loginScene, profileScene, pictureScene;
+    private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo, entryBoxButton,
             createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack, profileButtonFollow,
             profileButtonMainFeed, pictureButtonLike, pictureButtonComment;
-    private static Label alertBoxLabel, confirmBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
+    private static Label alertBoxLabel, confirmBoxLabel, entryBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
             profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow, pictureLabelInfo, pictureLabelInfo2, 
             pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3;
-    private static VBox alertBoxVBox, confirmBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
+    private static VBox alertBoxVBox, confirmBoxVBox, entryBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
             profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
             loginHBoxBottom, profileHBox, profileHBox2, pictureHBoxTop, pictureHBoxUser, pictureHBoxLike, pictureHBoxComment;
-    private static TextField createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
+    private static TextField entryBoxTextField, createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName;
     private static BorderPane createAccountBorderPane, loginBorderPane;
     private static ScrollPane profileScrollPane, profileScrollPane2, pictureScrollPaneComments;
     
     private static boolean comfirmBoxAnswer;
+    private static String entryBoxAnswer;
     public static RegisteredUser userLoggedIn;
     
     public static Stage window;
@@ -118,6 +121,7 @@ public class GUI
         Boolean answer = GUI.ConfirmBox("Exit Program", "Are you sure you want to exit the program?");
         if (answer == true)
         {
+            GUI.userLoggedIn = null;
             GUI.window.close();
         }
     }
@@ -181,6 +185,37 @@ public class GUI
         return comfirmBoxAnswer;
     }
     
+    public static String EntryBox(String title, String message, String button)
+    {
+        entryBoxStage = new Stage();
+        entryBoxStage.initModality(Modality.APPLICATION_MODAL);
+        entryBoxStage.setTitle(title);
+        entryBoxStage.setMinWidth(350);
+        
+        entryBoxLabel = new Label(message);
+        
+        entryBoxTextField = new TextField();
+        entryBoxTextField.setAlignment(Pos.BASELINE_RIGHT);
+        entryBoxTextField.setPromptText("Enter comment here");
+        
+        entryBoxButton = new Button(button);
+        entryBoxButton.setOnAction(e -> {
+            entryBoxAnswer = entryBoxTextField.getText();
+            entryBoxStage.close();
+        });
+        
+        entryBoxVBox = new VBox(20);
+        entryBoxVBox.setPadding(new Insets(10));
+        entryBoxVBox.setAlignment(Pos.CENTER);
+        entryBoxVBox.getChildren().addAll(entryBoxLabel, entryBoxTextField, entryBoxButton);
+        
+        entryBoxScene = new Scene(entryBoxVBox);
+        entryBoxStage.setScene(entryBoxScene);
+        entryBoxStage.showAndWait();
+        
+        return entryBoxAnswer;
+    }
+    
     public static void CreateAccount()
     {
         createAccountTitleLabel = new Label("Create Your Account");
@@ -206,7 +241,7 @@ public class GUI
                                                     createAccountTextFieldBiography.getText(),
                                                     true);
             PixTastic.registeredUserAL.add(user);
-            GUI.userLoggedIn = user;
+            //GUI.userLoggedIn = user;
             Profile(PixTastic.registeredUserAL.get(1));
         });
         createAccountTextFieldUsername = new TextField();
@@ -274,6 +309,24 @@ public class GUI
         loginTextFieldName = new TextField();
         loginTextFieldName.setPromptText("e.g. Seth Perts");
         
+        loginButton.setOnAction(e -> {
+            int ct = 0;
+            for (RegisteredUser ele : PixTastic.registeredUserAL)
+            {
+                if (ele.getUsername().equals(loginTextFieldUsername.getText()) && ele.getName().equalsIgnoreCase(loginTextFieldName.getText()))
+                {
+                    ct++;
+                    GUI.userLoggedIn = ele;
+                    Profile(ele);
+                }
+            }
+            if (ct == 0)
+            {
+                GUI.AlertBox("Error: Incorrect Info", "The name/username entered isn't valid! Please try again.");
+                GUI.Login();
+            }
+        });
+        
         loginVBoxLeft = new VBox(40);
         loginVBoxLeft.setAlignment(Pos.CENTER_LEFT);
         loginVBoxLeft.getChildren().addAll(loginLabelName, loginLabelUsername);
@@ -319,6 +372,9 @@ public class GUI
         
         profileButtonFollow = new Button("Follow This Person?");
         profileButtonMainFeed = new Button("Go to Main Feed");
+     
+        System.out.println(userLoggedIn.getAlFollowing().contains(user));
+            
         if (userLoggedIn.getAlFollowing().contains(user))
         {
             profileLabelAlreadyFollow.setVisible(true);
@@ -349,17 +405,14 @@ public class GUI
         profileVBoxFeed = new VBox(10);
         profileVBoxFeed.setAlignment(Pos.CENTER_RIGHT);
         profileVBoxFeed.setPadding(new Insets(10));
-        int ct = 0;
         for (Picture ele : user.getArraylist())
         {
-            int len = user.getArraylist().size();
             File f = new File(ele.getFPath());
             ImageView photo = new ImageView(f.toURI().toString());
             photo.setFitHeight(400);
             photo.setFitWidth(400);
             photo.setOnMouseClicked(e -> PicturePost(ele));
             profileVBoxFeed.getChildren().add(photo);
-            ct++;
         }
         profileScrollPane.setContent(profileVBoxFeed);
         System.out.println(profileVBoxFeed.toString());
@@ -375,10 +428,6 @@ public class GUI
         profileHBox = new HBox(10);
         profileHBox.setAlignment(Pos.TOP_LEFT);
         profileHBox.getChildren().addAll(profileVBoxTop, image);
-        
-//        profileHBox2 = new HBox(100);
-//        profileHBox2.setAlignment(Pos.CENTER_RIGHT);
-//        profileHBox2.getChildren().addAll(profileLabelAlreadyFollow, profileButtonFollow);
         
         profileVBox = new VBox(10);
         profileVBox.setPadding(new Insets(10));
@@ -431,6 +480,13 @@ public class GUI
             pictureLabelAlreadyLiked.setVisible(true);
         }
         pictureButtonComment = new Button("Add a Comment");
+        pictureButtonComment.setOnAction(e -> {
+            String ans = GUI.EntryBox("Comment", "Enter a comment to post to this picture.", "Post Comment");
+            System.out.println(GUI.userLoggedIn.getUsername()+"test");
+            ans = GUI.userLoggedIn.getUsername()+" ("+LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))+" )  --  "+ans;
+            pic.addComments(ans);
+            PicturePost(pic);
+        });
         
         pictureHBoxLike = new HBox(15);
         pictureHBoxLike.getChildren().addAll(pictureButtonLike, pictureLabelAlreadyLiked);
