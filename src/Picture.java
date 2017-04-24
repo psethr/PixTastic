@@ -1,11 +1,15 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Picture
 {
+    private RegisteredUser owner;
     protected String filepath;  //filepath of the picture
     protected String caption; //caption attached to the picture
     protected String comments; //comments attached to the picture
     protected String hashtag; //hashtags assigned to the picture
+    private ArrayList<String> likedBy;
     protected int likes; //number of likes associated with a picture
     protected LocalDateTime time;  //time a picture was 
     
@@ -17,14 +21,16 @@ public class Picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
     */
-    public Picture(String f, String cap, String com, String h, int l, 
-            LocalDateTime t){
+    public Picture(String f, String cap, String com, String h, int l)
+    {
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
-        time = t;
+        time = LocalDateTime.now();
+        owner = GUI.userLoggedIn;
+        likedBy = new ArrayList<String>();
     }
     /**
      * Accessor method for file-path.
@@ -61,7 +67,7 @@ public class Picture
         return comments;
     }
     
-    public void setComments(String comments)
+    public void addComments(String comments)
     {
        this.comments = comments;
     }
@@ -90,9 +96,45 @@ public class Picture
      * Increases the number of likes when the like button is clicked.
      * @return the new number of likes associated with a picture
      */
-    public int setLikes()
+    public int addLikes(RegisteredUser user)
     {
         likes = likes + 1;
+        getLikedBy().add(user.getUsername());
         return likes;
+    }
+
+    /**
+     * @return the owner
+     */
+    public RegisteredUser getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(RegisteredUser owner) {
+        this.owner = owner;
+    }
+    
+    /**
+     * @return the owner
+     */
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    /**
+     * @return the likedBy
+     */
+    public ArrayList<String> getLikedBy() {
+        return likedBy;
+    }
+
+    /**
+     * @param likedBy the likedBy to set
+     */
+    public void setLikedBy(ArrayList<String> likedBy) {
+        this.likedBy = likedBy;
     }
 }

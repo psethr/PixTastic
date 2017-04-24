@@ -11,6 +11,7 @@ public class RegisteredUser
     private boolean isRegistered;
     private boolean isLoggedIn;
     private ArrayList<Picture> al;
+    private ArrayList<RegisteredUser> alFollowing;
     
     public RegisteredUser(
             String username,
@@ -18,8 +19,7 @@ public class RegisteredUser
             String location,
             String profilePic,
             String bio,
-            boolean isRegistered,
-            boolean isLoggedIn)
+            boolean isRegistered)
     {
         this.username = username;
         this.name = name;
@@ -27,8 +27,8 @@ public class RegisteredUser
         this.profilePic = profilePic;
         this.bio = bio;
         this.isRegistered = isRegistered;
-        this.isLoggedIn = isLoggedIn;
         al = new ArrayList<Picture>();
+        alFollowing = new ArrayList<RegisteredUser>();
     }
 
     /**
@@ -137,16 +137,49 @@ public class RegisteredUser
     }
 
     /**
-     * @return the isLoggedIn
+     * @return the alFollowing
      */
-    public boolean isLoggedIn() {
-        return isLoggedIn;
+    public ArrayList<RegisteredUser> getAlFollowing() {
+        return alFollowing;
     }
 
     /**
-     * @param isLoggedIn the isLoggedIn to set
+     * @param alFollowing the alFollowing to set
      */
-    public void setLoggedIn(boolean isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
+    public void setAlFollowing(ArrayList<RegisteredUser> alFollowing) {
+        this.alFollowing = alFollowing;
+    }
+    
+    /**
+     * @param user
+     */
+    public void addFollower(RegisteredUser user) {
+        alFollowing.add(user);
+    }
+    
+    public String toString(String list)
+    {
+        String s = "";
+        if (list.equalsIgnoreCase("pic"))
+        {
+            for (Picture ele : al)
+            {
+                s += ele.getFPath()+",  ";
+            }
+        }
+        else if (list.equalsIgnoreCase("follower"))
+        {
+            for (RegisteredUser ele : alFollowing)
+            {
+                s += ele.getUsername()+",  ";
+            }
+        }
+        return s;
+    }
+    public String toCloseString(){
+       
+        String s = " " + username + " " + " " + name + " " + " " + location 
+                + " " + " " + profilePic + " " + " " + bio;
+        return s;
     }
 }
