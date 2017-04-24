@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 
 /*
@@ -11,13 +11,11 @@ import java.util.ArrayList;
  *
  * @author tiffanylower
  */
-public class ComparatorByLocation {
-       
-        if (registeredUserAL.size() > 0) {
-            Collections.sort(list, new Comparator<RegisteredUser>() {
+public class ComparatorByLocation implements Comparator<RegisteredUser> {
+                   
+            @Override
                 public int compare(final RegisteredUser user1, final RegisteredUser user2) {
                     return user1.getLocation().compareTo(user2.getLocation());
       }
   }
-                    }
-
+                    
