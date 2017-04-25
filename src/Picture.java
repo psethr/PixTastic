@@ -21,21 +21,24 @@ public class Picture
     
     /**
     *  Default constructor to initialize a picture.
+     * @param u user who posted the picture
     *  @param f the pathway to the picture
     *  @param cap the caption for the picture
     *  @param com the comments attached to the picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
+     * @param t local date and time of when the picture was posted
     */
-    public Picture(RegisteredUser u, String f, String cap, String com, String h, int l, LocalDateTime t)
+    public Picture(RegisteredUser u, LocalDateTime t, String f, String cap, String com, String h, int l)
     {
         owner = u;
+        time = t;
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
-        time = t;
+        
         //time =   LocalDateTime.now();
         //formatTime = t;
         

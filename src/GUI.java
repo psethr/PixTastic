@@ -59,6 +59,7 @@ public class GUI
     public static VBox topMenu;
     public static BorderPane borderPane;
    
+    public static LocalDateTime time;
     
     public static void startProgram(Stage window)
     {
@@ -584,8 +585,9 @@ public class GUI
         createPictureButton = new Button("Create Picture Post");
         createPictureButton.setOnAction(e -> {
             System.out.println("test1");
+            time = LocalDateTime.now();
             Picture pic = new Picture(GUI.userLoggedIn,
-                                      LocalDateTime.now(),
+                                      time,
                                       createPictureTextFieldFile.getText(),
                                       createPictureTextFieldCaption.getText(),
                                       "",

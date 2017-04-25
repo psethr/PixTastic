@@ -89,9 +89,9 @@ public class PixTastic extends Application
            
            while((line2 = bufferedReader.readLine()) != null)
            { 
-             String[] inputSplit = line.split("(?<=\") *(?=\")");  
-             uname = inputSplit[0];
-             owner = RegisteredUser.getUsername(uname);
+             String[] inputSplit = line2.split("(?<=\") *(?=\")");  
+             owner = inputSplit[0];
+             //owner = RegisteredUser.getUsername(uname);
              System.out.println(owner);
              filepath = inputSplit[1];
              System.out.println(filepath);
@@ -106,9 +106,9 @@ public class PixTastic extends Application
              dateTime = inputSplit[6];
              LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
             
-             Picture pix = new Picture(owner, filepath, caption, comments, hashtag, likes, time); 
-             registeredUserAL.add(user);
-             numUsers++;
+             Picture pix = new Picture(owner, time, filepath, caption, comments, hashtag, likes); 
+             //registeredUserAL.add(user);
+             //numUsers++;
              //System.out.println(" " + registeredUserAL);
            }
            bufferedReader.close();
