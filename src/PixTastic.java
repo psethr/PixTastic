@@ -78,6 +78,7 @@ public class PixTastic extends Application
     {
             System.err.println("Caught IOException: " + e.getMessage());
     }
+    
     String filePictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pictures.txt";
         String line2 = "";
     try
@@ -90,7 +91,7 @@ public class PixTastic extends Application
            { 
              String[] inputSplit = line.split("(?<=\") *(?=\")");  
              uname = inputSplit[0];
-             owner = RegisteredUser.parseRegisteredUser(uname);
+             owner = RegisteredUser.getUsername(uname);
              System.out.println(owner);
              filepath = inputSplit[1];
              System.out.println(filepath);
@@ -105,7 +106,7 @@ public class PixTastic extends Application
              dateTime = inputSplit[6];
              LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
             
-             RegisteredUser.Picture picture = new Picture(username, name, location, profilePic, bio, true); 
+             Picture pix = new Picture(owner, filepath, caption, comments, hashtag, likes, time); 
              registeredUserAL.add(user);
              numUsers++;
              //System.out.println(" " + registeredUserAL);
