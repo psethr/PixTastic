@@ -13,6 +13,15 @@ public class RegisteredUser
     private ArrayList<Picture> al;
     private ArrayList<RegisteredUser> alFollowing;
     
+    /**
+     * Constructor to initialize a registered user
+     * @param username username selected by user
+     * @param name real name of user
+     * @param location user's location
+     * @param profilePic user's photo
+     * @param bio user's profile biography 
+     * @param isRegistered whether user is registered or not
+     */
     public RegisteredUser(
             String username,
             String name,
@@ -33,6 +42,7 @@ public class RegisteredUser
     }
 
     /**
+     * Accessor method for username 
      * @return the username
      */
     public String getUsername() {
@@ -40,6 +50,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for username
      * @param username the username to set
      */
     public void setUsername(String username) {
@@ -47,6 +58,7 @@ public class RegisteredUser
     }
 
     /**
+    * Accessor method for user's real name 
      * @return the name
      */
     public String getName() {
@@ -54,6 +66,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method to set name 
      * @param name the name to set
      */
     public void setName(String name) {
@@ -61,6 +74,7 @@ public class RegisteredUser
     }
 
     /**
+     * Accessor method for location
      * @return the location
      */
     public String getLocation() {
@@ -68,6 +82,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for user's location
      * @param location the location to set
      */
     public void setLocation(String location) {
@@ -75,6 +90,7 @@ public class RegisteredUser
     }
 
     /**
+     * Accessor method for profile picture
      * @return the profilePic
      */
     public String getProfilePic() {
@@ -82,6 +98,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for profile photo
      * @param profilePic the profilePic to set
      */
     public void setProfilePic(String profilePic) {
@@ -89,6 +106,7 @@ public class RegisteredUser
     }
 
     /**
+     * Accessor method for bio
      * @return the bio
      */
     public String getBio() {
@@ -96,6 +114,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for user's profile bio
      * @param bio the bio to set
      */
     public void setBio(String bio) {
@@ -103,6 +122,7 @@ public class RegisteredUser
     }
 
     /**
+     * Boolean method for if user is registered or not
      * @return the isRegistered
      */
     public boolean isRegistered() {
@@ -110,6 +130,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for isRegistered boolean
      * @param isRegistered the isRegistered to set
      */
     public void setIsRegistered(boolean isRegistered) {
@@ -117,6 +138,7 @@ public class RegisteredUser
     }
 
     /**
+     * Accessor method for arraylist of registered users
      * @return the al
      */
     public ArrayList<Picture> getArraylist() {
@@ -124,6 +146,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting method for arraylist of registered users
      * @param al the al to set
      */
     public void setArratList(ArrayList<Picture> al) {
@@ -131,6 +154,7 @@ public class RegisteredUser
     }
     
     /**
+     * Adding picture to profile 
      * @param pic 
      */
     public void addPicture(Picture pic) {
@@ -138,6 +162,7 @@ public class RegisteredUser
     }
 
     /**
+    * Getting list of user's followed 
      * @return the alFollowing
      */
     public ArrayList<RegisteredUser> getAlFollowing() {
@@ -145,6 +170,7 @@ public class RegisteredUser
     }
 
     /**
+     * Setting list of user's followed.
      * @param alFollowing the alFollowing to set
      */
     public void setAlFollowing(ArrayList<RegisteredUser> alFollowing) {
@@ -152,12 +178,18 @@ public class RegisteredUser
     }
     
     /**
+     * Adding a follower
      * @param user
      */
     public void addFollower(RegisteredUser user) {
         alFollowing.add(user);
     }
     
+    /**
+     * 
+     * @param list arraylist of registered users 
+     * @return s sting 
+     */
     public String toString(String list)
     {
         String s = "";
@@ -177,6 +209,11 @@ public class RegisteredUser
         }
         return s;
     }
+    
+    /**
+     * Closing toString
+     * @return string
+     */
     public String toCloseString(){
        
         String s = " " + username + " " + " " + name + " " + " " + location 
