@@ -18,6 +18,7 @@ import javafx.stage.*;
 
 public class GUI
 {
+    
     private static Stage alertBoxStage, confirmBoxStage, entryBoxStage, createPictureStage;
     private static Scene alertBoxScene, confirmBoxScene, entryBoxScene, createAccountScene, loginScene, profileScene, pictureScene,
             createPictureScene, mainFeedScene;
