@@ -1,11 +1,6 @@
 import java.util.*;
 import java.time.LocalDateTime;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *Compares picture posts by number of likes
@@ -16,7 +11,7 @@ public class ComparatorByLikes implements Comparator<Picture> {
     * 
     * @param a picture post 
     * @param b another picture post
-    * @return 
+    * @return  ordered array list
     */
     public int compare(Picture a, Picture b) {
         int likes1 = a.getLikes();
@@ -28,8 +23,8 @@ public class ComparatorByLikes implements Comparator<Picture> {
             return 1;
         } else if (likes1 < likes2) {
             return -1;
-        } else if (likes1 == likes2) {
-            if (time1.compareTo(time2) > 0) {
+        } else if (likes1 == likes2) { //if likes equal, compare time
+            if (time1.compareTo(time2) > 0) { //order picture that was posted first
                 return 1;
             } else if (time1.compareTo(time2) < 0) {
                 return -1;

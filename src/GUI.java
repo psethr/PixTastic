@@ -161,6 +161,25 @@ public class GUI
              {
                 System.err.println("Error: " + e.getMessage());
              }  
+             
+             String outfilepictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pictures.txt";
+             try
+             {
+                FileWriter outfile = new FileWriter(outfilepictures);
+                BufferedWriter out = new BufferedWriter(outfile);
+               
+                for(Picture p: RegisteredUser.al)
+                { 
+                 out.write(p.toClosePixString());
+                 out.newLine();
+                
+                }                 
+                out.close();
+             }
+             catch (FileNotFoundException e)
+             {
+                System.err.println("Error: " + e.getMessage());
+             }  
             GUI.userLoggedIn = null;
             GUI.window.close();
         }

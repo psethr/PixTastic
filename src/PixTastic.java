@@ -36,9 +36,22 @@ public class PixTastic extends Application
    public static String hashtag = "";
    public static int likes;
    public static String dateTime = "";
-   public static LocalDateTime time;
+   public static LocalDateTime t;
    
    public static ArrayList<RegisteredUser> registeredUserAL = new ArrayList<RegisteredUser>();
+   
+   public static RegisteredUser Owner(String uname, ArrayList<RegisteredUser> al)
+   {
+       RegisteredUser user = null;
+       for(RegisteredUser ele : al)
+       {
+           if(uname.equals(ele.getUsername()))
+           {
+               user = ele;
+           }
+       }
+       return user;
+   }
    
    public static void main(String[] args)
     {
@@ -79,7 +92,7 @@ public class PixTastic extends Application
             System.err.println("Caught IOException: " + e.getMessage());
     }
     
-    String filePictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pictures.txt";
+    String filePictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pixtures.txt";
         String line2 = "";
     try
     {  
@@ -90,23 +103,27 @@ public class PixTastic extends Application
            while((line2 = bufferedReader.readLine()) != null)
            { 
              String[] inputSplit = line2.split("(?<=\") *(?=\")");  
-             owner = inputSplit[0];
-             //owner = RegisteredUser.getUsername(uname);
-             System.out.println(owner);
-             filepath = inputSplit[1];
+             uname = inputSplit[0];
+             owner = Owner(uname, registeredUserAL);
+             System.out.println(uname);
+             dateTime = inputSplit[1];
+             LocalDateTime t = LocalDateTime.parse(dateTime, formatter);
+             System.out.println(t);
+             filepath = inputSplit[2];
              System.out.println(filepath);
-             caption = inputSplit[2];
+             caption = inputSplit[3];
              System.out.println(caption);
-             comments = inputSplit[3];
+             comments = inputSplit[4];
              System.out.println(comments);
-             hashtag = inputSplit[4];
+             hashtag = inputSplit[5];
              System.out.println(hashtag);
-             likes = Integer.valueOf(inputSplit[5]);
+             likes = Integer.valueOf(inputSplit[6]);
              System.out.println(likes);
-             dateTime = inputSplit[6];
-             LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
+             
+             
+             System.out.println(t);
             
-             Picture pix = new Picture(owner, time, filepath, caption, comments, hashtag, likes); 
+             Picture pix = new Picture(owner, t, filepath, caption, comments, hashtag, likes); 
              //registeredUserAL.add(user);
              //numUsers++;
              //System.out.println(" " + registeredUserAL);

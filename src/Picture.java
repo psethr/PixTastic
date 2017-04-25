@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Picture
 {
     protected RegisteredUser owner;
-    protected String username;
+    public String username;
     protected String filepath;  //filepath of the picture
     protected String caption; //caption attached to the picture
     protected String comments; //comments attached to the picture
@@ -55,7 +55,10 @@ public class Picture
     {
         return filepath;
     }
-    
+    /**
+     * Setting file path to variable 
+     * @param path 
+     */
     public void setFPath(String path)
     {
         filepath = path;
@@ -68,7 +71,10 @@ public class Picture
     {
         return caption;
     }
-    
+    /**
+     * Setting caption to variable 
+     * @param captions 
+     */
     public void setCaptions(String captions)
     {
         this.caption = captions;
@@ -81,7 +87,10 @@ public class Picture
     {
         return comments;
     }
-    
+    /**
+     * Setting comments using a variable 
+     * @param comments 
+     */
     public void addComments(String comments)
     {
        this.comments = comments;
@@ -94,7 +103,10 @@ public class Picture
     {
         return hashtag;
     }
-    
+    /**
+     * Setting hashtag to variable
+     * @param tag 
+     */
     public void setHashtag(String tag)
     {
         hashtag = tag;
@@ -119,6 +131,7 @@ public class Picture
     }
 
     /**
+     * Accessor method for user
      * @return the owner
      */
     public RegisteredUser getOwner() {
@@ -126,6 +139,7 @@ public class Picture
     }
 
     /**
+     * Setting method for user
      * @param owner the owner to set
      */
     public void setOwner(RegisteredUser owner) {
@@ -133,7 +147,8 @@ public class Picture
     }
     
     /**
-     * @return the time
+     * Accessor method for time 
+     * @return time 
      */
     public LocalDateTime getTime() {
         return time;
@@ -154,6 +169,7 @@ public class Picture
    
    /**
     /**
+     * Accessor method for likes from picture 
      * @return the likedBy
      */
     public ArrayList<String> getLikedBy() {
@@ -161,10 +177,23 @@ public class Picture
     }
 
     /**
+     * Setting method for likes from a picture 
      * @param likedBy the likedBy to set
      */
     public void setLikedBy(ArrayList<String> likedBy) {
         this.likedBy = likedBy;
+    }
+    
+    /**
+     * Closing toString for pictures
+     * @return s2 string
+     */
+    public String toClosePixString(){
+       
+        String s2 = " " + username + " " + " " + formatTime() + " " + " " + filepath 
+                + " " + " " + caption + " " + " " + comments + " " + " " + hashtag
+                + " " + " " + likes;
+        return s2;
     }
     
 }
