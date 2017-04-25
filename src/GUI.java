@@ -16,12 +16,16 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
 
 
 public class GUI
@@ -55,8 +59,9 @@ public class GUI
     private static boolean comfirmBoxAnswer;
     private static String entryBoxAnswer;
     private static int ct = 0;
-    private static boolean other;
+    private static boolean other = false;
     public static RegisteredUser userLoggedIn;
+    private static boolean time, likes, location = false;
     
     public static Stage window;
     public static Scene startPage;
@@ -74,12 +79,7 @@ public class GUI
         window.setTitle("PixTastic");
         window.setOnCloseRequest(e -> {
             e.consume();
-            
-            try {
-                exitProgram();
-            } catch (IOException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            exitProgram();
         });
         title1 = new Label("Pix");
         title1.setFont(Font.font("Arial Black", 80));
@@ -96,11 +96,7 @@ public class GUI
             @Override
             public void handle(ActionEvent event)
                 {
-                try {
                     exitProgram();
-                } catch (IOException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 }
         });
         loginButtonMain = new Button("Login");
@@ -116,7 +112,10 @@ public class GUI
         });
         guest = new Button("Guest");
         guest.setFont(Font.font("Arial", 30));
-        guest.setOnAction(e -> MainFeed());
+        guest.setOnAction(e -> {
+            GUI.userLoggedIn = null;
+            MainFeed();
+        });
         
         topMenu1 = new HBox();
         topMenu1.setAlignment(Pos.CENTER_LEFT);
@@ -145,13 +144,27 @@ public class GUI
         window.show();
     }
     
-    public static void exitProgram() throws IOException
+    public static void exitProgram()
     {
         Boolean answer = GUI.ConfirmBox("Exit Program", "Are you sure you want to exit the program?");
         if (answer == true)
         {
             
-            String outfileusers = "C:\\Users\\Seth\\Desktop\\CPSC 240\\User.txt";
+            String outfileusers = "C:\\Users\\Seth\\Desktop\\CPSC 240\\User.bin";
+            try 
+            {
+                ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(outfileusers));
+                os.writeObject(PixTastic.registeredUserAL);
+            }
+            catch (EOFException ex) {
+               Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           catch (FileNotFoundException ex) {
+               Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (IOException ex) {
+               Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            /*String outfileusers = "C:\\Users\\Seth\\Desktop\\CPSC 240\\User.txt";
              try
              {
                 FileWriter outfile = new FileWriter(outfileusers);
@@ -169,6 +182,25 @@ public class GUI
              {
                 System.err.println("Error: " + e.getMessage());
              }  
+             
+             String outfilepictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pictures.txt";
+             try
+             {
+                FileWriter outfile = new FileWriter(outfilepictures);
+                BufferedWriter out = new BufferedWriter(outfile);
+               
+                for(Picture p: RegisteredUser.al)
+                { 
+                 out.write(p.toClosePixString());
+                 out.newLine();
+                
+                }                 
+                out.close();
+             }
+             catch (FileNotFoundException e)
+             {
+                System.err.println("Error: " + e.getMessage());
+             } */ 
             GUI.userLoggedIn = null;
             GUI.window.close();
         }
@@ -352,9 +384,9 @@ public class GUI
             startProgram(window);
         });
         
-        loginTextFieldUsername = new TextField("seth77");
+        loginTextFieldUsername = new TextField();
         loginTextFieldUsername.setPromptText("e.g. seth77");
-        loginTextFieldName = new TextField("seth perts");
+        loginTextFieldName = new TextField();
         loginTextFieldName.setPromptText("e.g. Seth Perts");
         
         loginButton.setOnAction(e -> {
@@ -643,59 +675,68 @@ public class GUI
     
     public static void MainFeed()
     {
-        tempAL = PixTastic.arraylistComp;
-        //arraylistComp.clear();
-        System.out.println("1"+PixTastic.arraylistComp.toString());
-        //arraylistComp = new ArrayList<Picture>();
-        if (ct == 0)
+        if ((time == false) && (likes == false) && (location == false))
         {
-            for (RegisteredUser ele : GUI.userLoggedIn.getAlFollowing())
+            PixTastic.pictureAL.clear();
+            for (RegisteredUser ele : PixTastic.registeredUserAL)
             {
                 for (Picture pic : ele.getArraylist())
                 {
-                    PixTastic.arraylistComp.add(pic);
-                    System.out.println("2"+pic.getFPath());
+                    PixTastic.pictureAL.add(pic);
                 }
             }
         }
-        mainFeedLabelTitle = new Label(GUI.userLoggedIn.getUsername()+"'s Main Feed\t\t\t\t");
+        time = false;
+        likes = false;
+        
+        
+        mainFeedLabelTitle = new Label();
+        if (GUI.userLoggedIn != null)
+        {
+            mainFeedLabelTitle.setText(GUI.userLoggedIn.getUsername()+"'s Main Feed\t\t\t\t");
+        }
+        else
+        {
+            mainFeedLabelTitle.setText("Guest's Main Feed\t\t\t\t");
+        }
         mainFeedLabelTitle.setOnMouseClicked(e -> {
+        if (GUI.userLoggedIn != null)
+        {
             Profile(GUI.userLoggedIn);
+        }
+        else
+            GUI.AlertBox("Not Logged In!", "Sorry, You must be logged in to do that!");
         });
         mainFeedLabelTitle.setFont(Font.font("arial", 40));
         mainFeedLabelSort = new Label("Sort By:  ");
         mainFeedLabelSort.setFont(Font.font("arial", 25));
         mainFeedLabelSearch = new Label("Search by HashTag:");
         mainFeedLabelSearch.setFont(Font.font("arial", 25));
-//        mainFeedLabelImage = new Label(
-//        "Posted By:\t\t\t\n\nTime Posted:\t\t\t\n\nLikes:\t\t\t\n\nLocation:\t\t\t\n\nHashTag:\t\t\t");
-//        mainFeedLabelImage.setFont(Font.font("arial", 25));
         
         mainFeedButtonSortTime = new Button("Time Posted");
         mainFeedButtonSortTime.setOnAction(e -> {
-            System.out.println("3"+PixTastic.arraylistComp.toString());
-            Collections.sort(PixTastic.arraylistComp, new ComparatorByTime());
-            System.out.println("4"+PixTastic.arraylistComp.toString());
-            other = false;
+            time = true;
+            Collections.sort(PixTastic.pictureAL, new ComparatorByTime());
             MainFeed();
         });
         mainFeedButtonSortLikes = new Button("Likes");//arraylistComp.add(pic);
         mainFeedButtonSortLikes.setOnAction(e -> {
-            System.out.println("3"+PixTastic.arraylistComp.toString());
-            Collections.sort(PixTastic.arraylistComp, new ComparatorByLikes());
-            System.out.println("4"+PixTastic.arraylistComp.toString());
-            other = false;
+            likes = true;
+            Collections.sort(PixTastic.pictureAL, new ComparatorByLikes());
             MainFeed();
         });
-        mainFeedButtonSortLocation = new Button("Location");
-        mainFeedButtonSortLocation.setOnAction(e -> {
-            System.out.println("3"+PixTastic.arraylistComp.toString());
-            Collections.sort(GUI.userLoggedIn.getAlFollowing(), new ComparatorByLocation());
-            System.out.println("4"+PixTastic.arraylistComp.toString());
-            other = false;
-            MainFeed();
-        });
+        mainFeedButtonSortLocation = new Button("Follow");
+        if (GUI.userLoggedIn != null)
+            {
+                mainFeedButtonSortLocation.setOnAction(e -> {
+                location = true;
+                //Collections.sort(PixTastic.registeredUserAL, new ComparatorByLocation());
+                MainFeed();
+            });
+            }
+        
         mainFeedButtonSearch = new Button("Search");
+        mainFeedButtonSearch.setMinWidth(200);
         
         mainFeedTextFieldSearch = new TextField();
         mainFeedTextFieldSearch.setPromptText("e.g. #food");
@@ -703,8 +744,7 @@ public class GUI
         mainFeedTextFieldSearch.setMinWidth(400);
         
         mainFeedButtonSearch.setOnAction(e -> {
-            PixTastic.arraylistSearch.clear();
-            for (Picture ele : PixTastic.arraylistComp)
+            for (Picture ele : PixTastic.pictureAL)
             {
                 if (ele.getHashtag().equalsIgnoreCase(mainFeedTextFieldSearch.getText()))
                 {
@@ -733,8 +773,10 @@ public class GUI
                 ImageView photo = new ImageView(f.toURI().toString());
                 photo.setFitHeight(400);
                 photo.setFitWidth(400);
-                photo.setOnMouseClicked(e -> PicturePost(pic));
-
+                if (GUI.userLoggedIn != null)
+                {
+                    photo.setOnMouseClicked(e -> PicturePost(pic));
+                }
                 mainFeedLabelImage = new Label(
                         "Posted By:\t\t"+pic.getOwner().getUsername()
                         +"\n\nTime Posted:\t\t"+pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))
@@ -748,14 +790,46 @@ public class GUI
                 mainFeedVBoxImages.getChildren().add(mainFeedHBoxImage);
             }
         }
+        if (location == true)
+        {
+            for (RegisteredUser ele : GUI.userLoggedIn.getAlFollowing())
+            {
+                for (Picture pic : ele.getArraylist())
+                {
+                    File f = new File(pic.getFPath());
+                    ImageView photo = new ImageView(f.toURI().toString());
+                    photo.setFitHeight(400);
+                    photo.setFitWidth(400);
+                    if (GUI.userLoggedIn != null)
+                    {
+                        photo.setOnMouseClicked(e -> PicturePost(pic));
+                    }
+
+                    mainFeedLabelImage = new Label(
+                            "Posted By:\t\t"+pic.getOwner().getUsername()
+                            +"\n\nTime Posted:\t\t"+pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))
+                            +"\n\nLikes:\t\t\t"+pic.getLikes()
+                            +"\n\nLocation:\t\t\t"+pic.getOwner().getLocation()
+                            +"\n\nHashTag:\t\t\t"+pic.getHashtag());
+                    mainFeedLabelImage.setFont(Font.font("arial", 25));
+                    mainFeedHBoxImage = new HBox(50);
+                    mainFeedHBoxImage.getChildren().addAll(photo, mainFeedLabelImage);
+
+                    mainFeedVBoxImages.getChildren().add(mainFeedHBoxImage);
+                }
+            }
+        }
         else
-            for (Picture pic : tempAL)
+            for (Picture pic : PixTastic.pictureAL)
             {
                 File f = new File(pic.getFPath());
                 ImageView photo = new ImageView(f.toURI().toString());
                 photo.setFitHeight(400);
                 photo.setFitWidth(400);
-                photo.setOnMouseClicked(e -> PicturePost(pic));
+                if (GUI.userLoggedIn != null)
+                {
+                    photo.setOnMouseClicked(e -> PicturePost(pic));
+                }
 
                 mainFeedLabelImage = new Label(
                         "Posted By:\t\t"+pic.getOwner().getUsername()
@@ -780,6 +854,7 @@ public class GUI
         
         mainFeedScene = new Scene(mainFeedVBox, 1000, 900);
         GUI.window.setScene(mainFeedScene);
-        ct++;
+        location = false;
+        other = false;
     }
 }

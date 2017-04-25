@@ -1,6 +1,8 @@
 //Authors seth, rachel, tiffany
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.lang.Object;
+import java.time.LocalDateTime;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,21 +20,72 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.*;
 import java.io.*;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PixTastic extends Application
 {
+    public static int counter = 0;
+    /*
    public static String username;
    public static String name;
    public static String location;
    public static String profilePic;
    public static String bio;
    public static int numUsers = 0;
+   
+   public static String uname = "";
+   public static RegisteredUser owner; 
+   public static String filepath = "";
+   public static String caption = "";
+   public static String comments = "";
+   public static String hashtag = "";
+   public static int likes;
+   public static String dateTime = "";
+   public static LocalDateTime t;
+   */
    public static ArrayList<RegisteredUser> registeredUserAL = new ArrayList<RegisteredUser>();
+   public static ArrayList<Picture> pictureAL = new ArrayList<>();
    public static ArrayList<Picture> arraylistComp = new ArrayList<Picture>();
    public static ArrayList<Picture> arraylistSearch = new ArrayList<Picture>();
    
+   /*public static RegisteredUser Owner(String uname, ArrayList<RegisteredUser> al)
+   {
+       RegisteredUser user = null;
+       for(RegisteredUser ele : al)
+       {
+           if(uname.equals(ele.getUsername()))
+           {
+               user = ele;
+           }
+       }
+       return user;
+   }*/
+   
    public static void main(String[] args)
+{
+    ArrayList<RegisteredUser> deSerial = null;
+    try 
     {
+        ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\Users\\Seth\\Desktop\\CPSC 240\\User.bin"));
+        deSerial = (ArrayList<RegisteredUser>) is.readObject();
+        System.out.println("1"+deSerial.toString());
+        System.out.println("2"+registeredUserAL.toString());
+        PixTastic.registeredUserAL = deSerial;
+        is.close();
+    }
+    catch (EOFException ex) {
+        //Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    catch (FileNotFoundException | ClassNotFoundException ex) {
+        Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IOException ex) {
+        Logger.getLogger(PixTastic.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        
+        
         /*
         Scanner in = new Scanner(System.in);
         Scanner f = null;
@@ -68,8 +121,56 @@ public class PixTastic extends Application
     catch (IOException e) 
     {
             System.err.println("Caught IOException: " + e.getMessage());
-    }*/
+    }
     
+    String filePictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pixtures.txt";
+        String line2 = "";
+    try
+    {  
+           FileReader fileReader2 = new FileReader(filePictures);
+           BufferedReader bufferedReader2 = new BufferedReader(fileReader2);
+           DateTimeFormatter formatter= DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss");
+           
+           while((line2 = bufferedReader2.readLine()) != null)
+           { 
+             String[] inputSplit2 = line2.split("(?<=\") *(?=\")");  
+             uname = inputSplit2[0];
+             owner = Owner(uname, registeredUserAL);
+             System.out.println(uname);
+             dateTime = inputSplit2[1];
+             //int dt = Integer.parseInt(dateTime);
+             //LocalDateTime.of(LocalDate.of(l, Month.MARCH, l), LocalTime.of(l, l, l));
+             LocalDateTime t = LocalDateTime.parse(dateTime, formatter);
+             //LocalDateTime t = 
+             //System.out.println(t);
+             filepath = inputSplit2[2];
+             System.out.println(filepath);
+             caption = inputSplit2[3];
+             System.out.println(caption);
+             comments = inputSplit2[4];
+             System.out.println(comments);
+             hashtag = inputSplit2[5];
+             System.out.println(hashtag);
+             likes = Integer.valueOf(inputSplit2[6]);
+             System.out.println(likes);
+             
+             
+             System.out.println(t);
+            
+             Picture pix = new Picture(owner, t, filepath, caption, comments, hashtag, likes); 
+             RegisteredUser.al.add(pix);
+             //numUsers++;
+             //System.out.println(" " + registeredUserAL);
+           }
+           bufferedReader2.close();
+    }
+        
+    catch (IOException e) 
+    {
+            System.err.println("Caught IOException: " + e.getMessage());
+    }
+    */
+    /*
         RegisteredUser user1 = new RegisteredUser("seth77","Seth Perts","Virginia","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","I go to school at UMW. My favorite color is blue. My favorite football team is the steelers. Go Pittsburgh!",true);
         GUI.userLoggedIn = user1;
         Picture pic1 = new Picture(user1, LocalDateTime.now(),"C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\cat1.jpg","I love my cat!","blah","#cats",10);
@@ -101,10 +202,9 @@ public class PixTastic extends Application
         user1.addFollower(user2);
         System.out.println(user1.getAlFollowing().get(0).getUsername());
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
-        //System.out.println(GUI.userLoggedIn.getUsername());
-        
-        launch(args);
-    }
+        //System.out.println(GUI.userLoggedIn.getUsername());*/
+    launch(args);
+}
     
     @Override
     public void start(Stage window)

@@ -1,12 +1,15 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Picture
+public class Picture implements Serializable
 {
-    private RegisteredUser owner;
+    protected RegisteredUser owner;
+    public String username;
     protected String filepath;  //filepath of the picture
     protected String caption; //caption attached to the picture
     protected String comments; //comments attached to the picture
@@ -14,6 +17,8 @@ public class Picture
     private ArrayList<String> likedBy;
     protected int likes; //number of likes associated with a picture
     protected LocalDateTime time;  //time a picture was 
+    public String formatTime = "";
+    //protected String likedBy = "";
     
     /**
     *  Default constructor to initialize a picture.
@@ -23,9 +28,12 @@ public class Picture
     *  @param com the comments attached to the picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
+     * @param t local date and time of when the picture was posted
     */
     public Picture(RegisteredUser userName, LocalDateTime timePosted, String f, String cap, String com, String h, int l)
     {
+        owner = userName;
+        time = timePosted;
         filepath = f;
         caption = cap;
         comments = com;
@@ -34,6 +42,7 @@ public class Picture
         time = timePosted;//LocalDateTime.of(LocalDate.of(l, l, l), LocalTime.of(l, likes, l));
         owner = userName;
         likedBy = new ArrayList<String>();
+        //LocalDateTime.of(LocalDate.of(l, Month.MARCH, l), LocalTime.of(l, l, l));
     }
     /**
      * Accessor method for file-path.
@@ -43,7 +52,10 @@ public class Picture
     {
         return filepath;
     }
-    
+    /**
+     * Setting file path to variable 
+     * @param path 
+     */
     public void setFPath(String path)
     {
         filepath = path;
@@ -56,7 +68,10 @@ public class Picture
     {
         return caption;
     }
-    
+    /**
+     * Setting caption to variable 
+     * @param captions 
+     */
     public void setCaptions(String captions)
     {
         this.caption = captions;
@@ -69,7 +84,10 @@ public class Picture
     {
         return comments;
     }
-    
+    /**
+     * Setting comments using a variable 
+     * @param comments 
+     */
     public void addComments(String comments)
     {
        this.comments = comments;
@@ -82,7 +100,10 @@ public class Picture
     {
         return hashtag;
     }
-    
+    /**
+     * Setting hashtag to variable
+     * @param tag 
+     */
     public void setHashtag(String tag)
     {
         hashtag = tag;
@@ -107,6 +128,7 @@ public class Picture
     }
 
     /**
+     * Accessor method for user
      * @return the owner
      */
     public RegisteredUser getOwner() {
@@ -114,6 +136,7 @@ public class Picture
     }
 
     /**
+     * Setting method for user
      * @param owner the owner to set
      */
     public void setOwner(RegisteredUser owner) {
@@ -121,13 +144,29 @@ public class Picture
     }
     
     /**
-     * @return the owner
+     * Accessor method for time 
+     * @return time 
      */
     public LocalDateTime getTime() {
         return time;
     }
-
+    
     /**
+    * Returns LocalDateTime formatted to a string.
+    * @return formated time
+    */
+   
+   public String formatTime()
+   {
+     formatTime = String.format("%6.2f", time);
+     return formatTime;
+   }
+
+   
+   
+   /**
+    /**
+     * Accessor method for likes from picture 
      * @return the likedBy
      */
     public ArrayList<String> getLikedBy() {
@@ -135,9 +174,23 @@ public class Picture
     }
 
     /**
+     * Setting method for likes from a picture 
      * @param likedBy the likedBy to set
      */
     public void setLikedBy(ArrayList<String> likedBy) {
         this.likedBy = likedBy;
     }
+    
+    /**
+     * Closing toString for pictures
+     * @return s2 string
+     */
+    public String toClosePixString(){
+       
+        String s2 = " " + username + " " + " " + formatTime() + " " + " " + filepath 
+                + " " + " " + caption + " " + " " + comments + " " + " " + hashtag
+                + " " + " " + likes;
+        return s2;
+    }
+    
 }
