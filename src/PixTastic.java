@@ -15,13 +15,59 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class PixTastic extends Application
 {
-   public static ArrayList<RegisteredUser> registeredUserAL;
+   public static String username;
+   public static String name;
+   public static String location;
+   public static String profilePic;
+   public static String bio;
+   public static int numUsers = 0;
+   public static ArrayList<RegisteredUser> registeredUserAL = new ArrayList<RegisteredUser>();
    
    public static void main(String[] args)
     {
+        
+        Scanner in = new Scanner(System.in);
+        Scanner f = null;
+        String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt";
+        String line = "";
+    try
+    {  
+           FileReader fileReader = new FileReader(fileUsers);
+           BufferedReader bufferedReader = new BufferedReader(fileReader);
+           
+           while((line = bufferedReader.readLine()) != null)
+           { 
+             String[] inputSplit = line.split("(?<=\") *(?=\")");  
+             username = inputSplit[0];
+             System.out.println(" " + username);
+             name = inputSplit[1];
+             System.out.println(" " + name);
+             location = inputSplit[2];
+             System.out.println(" " + location);
+             profilePic = inputSplit[3];
+             System.out.println(" " + profilePic);
+             bio = inputSplit[4];
+             System.out.println(" " + bio);
+            
+             RegisteredUser user = new RegisteredUser(username, name, location, profilePic, bio, true); 
+             registeredUserAL.add(user);
+             numUsers++;
+             //System.out.println(" " + registeredUserAL);
+           }
+           bufferedReader.close();
+    }
+        
+    catch (IOException e) 
+    {
+            System.err.println("Caught IOException: " + e.getMessage());
+    }
+    /*
         RegisteredUser user1 = new RegisteredUser("seth77","Seth Perts","Virginia","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","I go to school at UMW. My favorite color is blue. My favorite football team is the steelers. Go Pittsburgh!",true);
         GUI.userLoggedIn = user1;
         Picture pic1 = new Picture("C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\cat1.jpg","I love my cat!","blah","#cats",10);
@@ -52,6 +98,7 @@ public class PixTastic extends Application
         registeredUserAL.add(user2);
         System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss")));
         //System.out.println(GUI.userLoggedIn.getUsername());
+        */
         launch(args);
     }
     

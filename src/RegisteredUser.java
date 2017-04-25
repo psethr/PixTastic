@@ -19,7 +19,8 @@ public class RegisteredUser
             String location,
             String profilePic,
             String bio,
-            boolean isRegistered)
+           boolean isRegistered)
+    
     {
         this.username = username;
         this.name = name;
@@ -174,6 +175,12 @@ public class RegisteredUser
                 s += ele.getUsername()+",  ";
             }
         }
+        return s;
+    }
+    public String toCloseString(){
+       
+        String s = " " + username + " " + " " + name + " " + " " + location 
+                + " " + " " + profilePic + " " + " " + bio;
         return s;
     }
 }

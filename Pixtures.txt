@@ -1,0 +1,6 @@
+"HappyCat" "C:/Users/Rachel/Documents/PixTastic/BlackCat.jpg" "The excitement is real..." " " "#cat" "4"
+"DogCrazy" "C:/Users/Rachel/Documents/PixTastic/DonutsandDog.jpg" "I WANT ONE" " " "#boxer" "8"
+"HappyCat" "C:/Users/Rachel/Documents/PixTastic/PickleandCat.jpeg" "What is THAT?!?" " " "#pickle" "11"
+"MusicIsLife" "C:/Users/Rachel/Documents/PixTastic/MusicGuitar.jpeg" "Truth" " " "#music" "2" 
+"MusicIsLife" "C:/Users/Rachel/Documents/PixTastic/HappyMusic.jpeg" "Sooooo accurate..." " " "#happiness" "23"
+"DogCrazy" "C:/Users/Rachel/Documents/PixTastic/SnowDog.jpg" "Best friends adventuring" " " "#snow" "14"

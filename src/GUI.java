@@ -15,6 +15,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class GUI
 {
@@ -62,7 +69,12 @@ public class GUI
         window.setTitle("PixTastic");
         window.setOnCloseRequest(e -> {
             e.consume();
-            exitProgram();
+            
+            try {
+                exitProgram();
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         title1 = new Label("Pix");
         title1.setFont(Font.font("Arial Black", 80));
@@ -79,7 +91,11 @@ public class GUI
             @Override
             public void handle(ActionEvent event)
                 {
+                try {
                     exitProgram();
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
         });
         loginButtonMain = new Button("Login");
@@ -123,11 +139,30 @@ public class GUI
         window.show();
     }
     
-    public static void exitProgram()
+    public static void exitProgram() throws IOException
     {
         Boolean answer = GUI.ConfirmBox("Exit Program", "Are you sure you want to exit the program?");
         if (answer == true)
         {
+            
+            String outfileusers = "C:\\Users\\Rachel\\NetBeansProjects\\PixTastic\\src\\User.txt";
+             try
+             {
+                FileWriter outfile = new FileWriter(outfileusers);
+                BufferedWriter out = new BufferedWriter(outfile);
+               
+                for(RegisteredUser u: PixTastic.registeredUserAL)
+                { 
+                 out.write(u.toCloseString());
+                 out.newLine();
+                
+                }                 
+                out.close();
+             }
+             catch (FileNotFoundException e)
+             {
+                System.err.println("Error: " + e.getMessage());
+             }  
             GUI.userLoggedIn = null;
             GUI.window.close();
         }
