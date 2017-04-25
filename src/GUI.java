@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,21 +38,24 @@ public class GUI
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
             profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow, pictureLabelInfo, pictureLabelInfo2, 
             pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3,
-            createPictureLabelTitle, createPictureLabelInfo, createPictureLabelInfo1, mainFeedLabelTitle, mainFeedLabel;
+            createPictureLabelTitle, createPictureLabelInfo, createPictureLabelInfo1, mainFeedLabelTitle, mainFeedLabelSort, mainFeedLabelSearch, mainFeedLabelImage;
     private static VBox alertBoxVBox, confirmBoxVBox, entryBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
-            profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox, createPictureVBox, createPictureVBoxTextField;
+            profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox, createPictureVBox, createPictureVBoxTextField,
+            mainFeedVBoxImages, mainFeedVBox;
     private static HBox confirmBoxHBox, createAccountHBoxBottom, createAccountHBoxCenter, loginHBoxCenter,
             loginHBoxBottom, profileHBox, profileHBox2, pictureHBoxTop, pictureHBoxUser, pictureHBoxLike, pictureHBoxComment,
-            createPictureHBoxInfo, createPictureHBoxButton;
+            createPictureHBoxInfo, createPictureHBoxButton, mainFeedHBoxTitle, mainFeedHBoxSearch, mainFeedHBoxImage;
     private static TextField entryBoxTextField, createAccountTextFieldUsername, createAccountTextFieldName, createAccountTextFieldLocation,
             createAccountTextFieldProfilePic, createAccountTextFieldBiography, loginTextFieldUsername, loginTextFieldName, createPictureTextFieldFile,
-            createPictureTextFieldCaption, createTextFieldHashtag;
+            createPictureTextFieldCaption, createTextFieldHashtag, mainFeedTextFieldSearch;
     private static BorderPane createAccountBorderPane, loginBorderPane;
-    private static ScrollPane profileScrollPane, profileScrollPane2, pictureScrollPaneComments;
+    private static ScrollPane profileScrollPane, profileScrollPane2, pictureScrollPaneComments, mainFeedScrollPaneImages;
     
     private static boolean comfirmBoxAnswer;
     private static String entryBoxAnswer;
+    private static int ct = 0;
+    private static boolean other;
     public static RegisteredUser userLoggedIn;
     
     public static Stage window;
@@ -61,7 +65,8 @@ public class GUI
     public static HBox centerMenu, bottomMenu, topMenu1;
     public static VBox topMenu;
     public static BorderPane borderPane;
-   
+    public static ArrayList<Picture> tempAL = new ArrayList<>();
+    //public static ArrayList<Picture> arraylistComp = new ArrayList<Picture>();
     
     public static void startProgram(Stage window)
     {
@@ -111,6 +116,7 @@ public class GUI
         });
         guest = new Button("Guest");
         guest.setFont(Font.font("Arial", 30));
+        guest.setOnAction(e -> MainFeed());
         
         topMenu1 = new HBox();
         topMenu1.setAlignment(Pos.CENTER_LEFT);
@@ -145,7 +151,7 @@ public class GUI
         if (answer == true)
         {
             
-            String outfileusers = "C:\\Users\\Rachel\\NetBeansProjects\\PixTastic\\src\\User.txt";
+            String outfileusers = "C:\\Users\\Seth\\Desktop\\CPSC 240\\User.txt";
              try
              {
                 FileWriter outfile = new FileWriter(outfileusers);
@@ -346,9 +352,9 @@ public class GUI
             startProgram(window);
         });
         
-        loginTextFieldUsername = new TextField();
+        loginTextFieldUsername = new TextField("seth77");
         loginTextFieldUsername.setPromptText("e.g. seth77");
-        loginTextFieldName = new TextField();
+        loginTextFieldName = new TextField("seth perts");
         loginTextFieldName.setPromptText("e.g. Seth Perts");
         
         loginButton.setOnAction(e -> {
@@ -594,7 +600,9 @@ public class GUI
         createPictureButton = new Button("Create Picture Post");
         createPictureButton.setOnAction(e -> {
             System.out.println("test1");
-            Picture pic = new Picture(createPictureTextFieldFile.getText(),
+            Picture pic = new Picture(GUI.userLoggedIn,
+                                      LocalDateTime.now(),
+                                      createPictureTextFieldFile.getText(),
                                       createPictureTextFieldCaption.getText(),
                                       "",
                                       createTextFieldHashtag.getText(),
@@ -634,6 +642,143 @@ public class GUI
     
     public static void MainFeed()
     {
+        tempAL = PixTastic.arraylistComp;
+        //arraylistComp.clear();
+        System.out.println("1"+PixTastic.arraylistComp.toString());
+        //arraylistComp = new ArrayList<Picture>();
+        if (ct == 0)
+        {
+            for (RegisteredUser ele : GUI.userLoggedIn.getAlFollowing())
+            {
+                for (Picture pic : ele.getArraylist())
+                {
+                    PixTastic.arraylistComp.add(pic);
+                    System.out.println("2"+pic.getFPath());
+                }
+            }
+        }
+        mainFeedLabelTitle = new Label(GUI.userLoggedIn.getUsername()+"'s Main Feed\t\t\t\t");
+        mainFeedLabelTitle.setOnMouseClicked(e -> {
+            Profile(GUI.userLoggedIn);
+        });
+        mainFeedLabelTitle.setFont(Font.font("arial", 40));
+        mainFeedLabelSort = new Label("Sort By:  ");
+        mainFeedLabelSort.setFont(Font.font("arial", 25));
+        mainFeedLabelSearch = new Label("Search by HashTag:");
+        mainFeedLabelSearch.setFont(Font.font("arial", 25));
+//        mainFeedLabelImage = new Label(
+//        "Posted By:\t\t\t\n\nTime Posted:\t\t\t\n\nLikes:\t\t\t\n\nLocation:\t\t\t\n\nHashTag:\t\t\t");
+//        mainFeedLabelImage.setFont(Font.font("arial", 25));
         
+        mainFeedButtonSortTime = new Button("Time Posted");
+        mainFeedButtonSortTime.setOnAction(e -> {
+            System.out.println("3"+PixTastic.arraylistComp.toString());
+            Collections.sort(PixTastic.arraylistComp, new ComparatorByTime());
+            System.out.println("4"+PixTastic.arraylistComp.toString());
+            other = false;
+            MainFeed();
+        });
+        mainFeedButtonSortLikes = new Button("Likes");//arraylistComp.add(pic);
+        mainFeedButtonSortLikes.setOnAction(e -> {
+            System.out.println("3"+PixTastic.arraylistComp.toString());
+            Collections.sort(PixTastic.arraylistComp, new ComparatorByLikes());
+            System.out.println("4"+PixTastic.arraylistComp.toString());
+            other = false;
+            MainFeed();
+        });
+        mainFeedButtonSortLocation = new Button("Location");
+        mainFeedButtonSortLocation.setOnAction(e -> {
+            System.out.println("3"+PixTastic.arraylistComp.toString());
+            Collections.sort(GUI.userLoggedIn.getAlFollowing(), new ComparatorByLocation());
+            System.out.println("4"+PixTastic.arraylistComp.toString());
+            other = false;
+            MainFeed();
+        });
+        mainFeedButtonSearch = new Button("Search");
+        
+        mainFeedTextFieldSearch = new TextField();
+        mainFeedTextFieldSearch.setPromptText("e.g. #food");
+        mainFeedTextFieldSearch.setAlignment(Pos.BASELINE_RIGHT);
+        mainFeedTextFieldSearch.setMinWidth(400);
+        
+        mainFeedButtonSearch.setOnAction(e -> {
+            PixTastic.arraylistSearch.clear();
+            for (Picture ele : PixTastic.arraylistComp)
+            {
+                if (ele.getHashtag().equalsIgnoreCase(mainFeedTextFieldSearch.getText()))
+                {
+                    PixTastic.arraylistSearch.add(ele);
+                }
+            }
+            other = true;
+            MainFeed();
+        });
+        
+        mainFeedHBoxTitle = new HBox(10);
+        mainFeedHBoxTitle.getChildren().addAll(mainFeedLabelTitle, mainFeedLabelSort, mainFeedButtonSortLikes, mainFeedButtonSortTime, mainFeedButtonSortLocation);
+        mainFeedHBoxSearch = new HBox(20);
+        mainFeedHBoxSearch.setAlignment(Pos.CENTER_RIGHT);
+        mainFeedHBoxSearch.getChildren().addAll(mainFeedLabelSearch, mainFeedTextFieldSearch, mainFeedButtonSearch);
+        
+        mainFeedVBoxImages = new VBox(25);
+        mainFeedVBoxImages.setAlignment(Pos.CENTER);
+        mainFeedVBoxImages.setPadding(new Insets(25,0,25,25));
+        
+        if (other == true)
+        {
+           for (Picture pic : PixTastic.arraylistSearch)
+            {
+                File f = new File(pic.getFPath());
+                ImageView photo = new ImageView(f.toURI().toString());
+                photo.setFitHeight(400);
+                photo.setFitWidth(400);
+                photo.setOnMouseClicked(e -> PicturePost(pic));
+
+                mainFeedLabelImage = new Label(
+                        "Posted By:\t\t"+pic.getOwner().getUsername()
+                        +"\n\nTime Posted:\t\t"+pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))
+                        +"\n\nLikes:\t\t\t"+pic.getLikes()
+                        +"\n\nLocation:\t\t\t"+pic.getOwner().getLocation()
+                        +"\n\nHashTag:\t\t\t"+pic.getHashtag());
+                mainFeedLabelImage.setFont(Font.font("arial", 25));
+                mainFeedHBoxImage = new HBox(50);
+                mainFeedHBoxImage.getChildren().addAll(photo, mainFeedLabelImage);
+
+                mainFeedVBoxImages.getChildren().add(mainFeedHBoxImage);
+            }
+        }
+        else
+            for (Picture pic : tempAL)
+            {
+                File f = new File(pic.getFPath());
+                ImageView photo = new ImageView(f.toURI().toString());
+                photo.setFitHeight(400);
+                photo.setFitWidth(400);
+                photo.setOnMouseClicked(e -> PicturePost(pic));
+
+                mainFeedLabelImage = new Label(
+                        "Posted By:\t\t"+pic.getOwner().getUsername()
+                        +"\n\nTime Posted:\t\t"+pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy @ hh:mm:ss"))
+                        +"\n\nLikes:\t\t\t"+pic.getLikes()
+                        +"\n\nLocation:\t\t\t"+pic.getOwner().getLocation()
+                        +"\n\nHashTag:\t\t\t"+pic.getHashtag());
+                mainFeedLabelImage.setFont(Font.font("arial", 25));
+                mainFeedHBoxImage = new HBox(50);
+                mainFeedHBoxImage.getChildren().addAll(photo, mainFeedLabelImage);
+
+                mainFeedVBoxImages.getChildren().add(mainFeedHBoxImage);
+            }
+        
+        mainFeedScrollPaneImages = new ScrollPane();
+        mainFeedScrollPaneImages.setMaxHeight(700);
+        mainFeedScrollPaneImages.setContent(mainFeedVBoxImages);
+        
+        mainFeedVBox = new VBox(10);
+        mainFeedVBox.setPadding(new Insets(10));
+        mainFeedVBox.getChildren().addAll(mainFeedHBoxTitle, mainFeedHBoxSearch, mainFeedScrollPaneImages, bottomMenu);
+        
+        mainFeedScene = new Scene(mainFeedVBox, 1000, 900);
+        GUI.window.setScene(mainFeedScene);
+        ct++;
     }
 }

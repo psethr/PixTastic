@@ -1,4 +1,6 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -15,21 +17,22 @@ public class Picture
     
     /**
     *  Default constructor to initialize a picture.
+     * @param userName
     *  @param f the pathway to the picture
     *  @param cap the caption for the picture
     *  @param com the comments attached to the picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
     */
-    public Picture(String f, String cap, String com, String h, int l)
+    public Picture(RegisteredUser userName, LocalDateTime timePosted, String f, String cap, String com, String h, int l)
     {
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
-        time = LocalDateTime.now();
-        owner = GUI.userLoggedIn;
+        time = timePosted;//LocalDateTime.of(LocalDate.of(l, l, l), LocalTime.of(l, likes, l));
+        owner = userName;
         likedBy = new ArrayList<String>();
     }
     /**

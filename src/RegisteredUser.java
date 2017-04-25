@@ -9,7 +9,6 @@ public class RegisteredUser
     private String profilePic;
     private String bio;
     private boolean isRegistered;
-    private boolean isLoggedIn;
     private ArrayList<Picture> al;
     private ArrayList<RegisteredUser> alFollowing;
     
@@ -31,7 +30,24 @@ public class RegisteredUser
         al = new ArrayList<Picture>();
         alFollowing = new ArrayList<RegisteredUser>();
     }
-
+    
+    public RegisteredUser Owner(String uname, ArrayList<RegisteredUser> al)
+    {
+        RegisteredUser user = null;
+        for (RegisteredUser ele : al)
+        {
+            if (uname.equals(ele.getUsername()))
+            {
+                user = ele;
+            }
+        }
+        return user;
+    }
+    
+    public boolean isOwner(String uname)
+    {
+        return (uname.equals(username));        
+    }
     /**
      * @return the username
      */

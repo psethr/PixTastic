@@ -14,8 +14,8 @@ import java.util.*;
 public class ComparatorByLocation implements Comparator<RegisteredUser> {
                    
             @Override
-                public int compare(final RegisteredUser user1, final RegisteredUser user2) {
-                    return user1.getLocation().compareTo(user2.getLocation());
+                public int compare(RegisteredUser user1, RegisteredUser user2) {
+                    return user1.getLocation().compareToIgnoreCase(user2.getLocation());
       }
   }
                     
