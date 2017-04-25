@@ -1,6 +1,8 @@
 //Authors seth, rachel, tiffany
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.lang.Object;
+import java.time.LocalDateTime;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.*;
 import java.io.*;
+import java.time.LocalTime;
+import java.time.Month;
 
 public class PixTastic extends Application
 {
@@ -55,7 +59,7 @@ public class PixTastic extends Application
    
    public static void main(String[] args)
     {
-        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss");
+        
         Scanner in = new Scanner(System.in);
         Scanner f = null;
         String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt";
@@ -96,39 +100,42 @@ public class PixTastic extends Application
         String line2 = "";
     try
     {  
-           FileReader fileReader = new FileReader(filePictures);
-           BufferedReader bufferedReader = new BufferedReader(fileReader);
+           FileReader fileReader2 = new FileReader(filePictures);
+           BufferedReader bufferedReader2 = new BufferedReader(fileReader2);
+           DateTimeFormatter formatter= DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss");
            
-           
-           while((line2 = bufferedReader.readLine()) != null)
+           while((line2 = bufferedReader2.readLine()) != null)
            { 
-             String[] inputSplit = line2.split("(?<=\") *(?=\")");  
-             uname = inputSplit[0];
+             String[] inputSplit2 = line2.split("(?<=\") *(?=\")");  
+             uname = inputSplit2[0];
              owner = Owner(uname, registeredUserAL);
              System.out.println(uname);
-             dateTime = inputSplit[1];
+             dateTime = inputSplit2[1];
+             //int dt = Integer.parseInt(dateTime);
+             //LocalDateTime.of(LocalDate.of(l, Month.MARCH, l), LocalTime.of(l, l, l));
              LocalDateTime t = LocalDateTime.parse(dateTime, formatter);
-             System.out.println(t);
-             filepath = inputSplit[2];
+             //LocalDateTime t = 
+             //System.out.println(t);
+             filepath = inputSplit2[2];
              System.out.println(filepath);
-             caption = inputSplit[3];
+             caption = inputSplit2[3];
              System.out.println(caption);
-             comments = inputSplit[4];
+             comments = inputSplit2[4];
              System.out.println(comments);
-             hashtag = inputSplit[5];
+             hashtag = inputSplit2[5];
              System.out.println(hashtag);
-             likes = Integer.valueOf(inputSplit[6]);
+             likes = Integer.valueOf(inputSplit2[6]);
              System.out.println(likes);
              
              
              System.out.println(t);
             
              Picture pix = new Picture(owner, t, filepath, caption, comments, hashtag, likes); 
-             //registeredUserAL.add(user);
+             RegisteredUser.al.add(pix);
              //numUsers++;
              //System.out.println(" " + registeredUserAL);
            }
-           bufferedReader.close();
+           bufferedReader2.close();
     }
         
     catch (IOException e) 
