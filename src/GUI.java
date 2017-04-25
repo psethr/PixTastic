@@ -511,6 +511,7 @@ public class GUI
         pictureLabelInfo2 = new Label(
         "Posted On:\t\t\t"+(pic.getTime().format(DateTimeFormatter.ofPattern("MM-dd-yyyy  @  hh:mm:ss")))+
                 "\n\nLikes:\t\t\t\t"+pic.getLikes()+"\n\nHashTag:\t\t\t\t"+pic.getHashtag());
+        
         pictureLabelInfo2.setFont(Font.font("arial", 20));
         pictureLabelAlreadyLiked = new Label("You Have Already Liked this Picture!");
         pictureLabelAlreadyLiked.setVisible(false);
