@@ -1,18 +1,15 @@
 import java.util.*;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author tiffanylower
+ *Compares users to match location 
  */
 public class ComparatorByLocation implements Comparator<RegisteredUser> {
-                   
+             /**
+             * 
+             * @param user1 registered user
+             * @param user2 another registered user
+             * @return 
+             */       
             @Override
                 public int compare(final RegisteredUser user1, final RegisteredUser user2) {
                     return user1.getLocation().compareTo(user2.getLocation());
