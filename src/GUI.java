@@ -687,6 +687,7 @@ public class GUI
             }
         }
         time = false;
+        
         likes = false;
         
         
