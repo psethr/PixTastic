@@ -584,7 +584,9 @@ public class GUI
         createPictureButton = new Button("Create Picture Post");
         createPictureButton.setOnAction(e -> {
             System.out.println("test1");
-            Picture pic = new Picture(createPictureTextFieldFile.getText(),
+            Picture pic = new Picture(GUI.userLoggedIn,
+                                      LocalDateTime.now(),
+                                      createPictureTextFieldFile.getText(),
                                       createPictureTextFieldCaption.getText(),
                                       "",
                                       createTextFieldHashtag.getText(),

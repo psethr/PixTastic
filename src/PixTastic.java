@@ -27,11 +27,22 @@ public class PixTastic extends Application
    public static String profilePic;
    public static String bio;
    public static int numUsers = 0;
+   
+   public static String uname = "";
+   public static RegisteredUser owner; 
+   public static String filepath = "";
+   public static String caption = "";
+   public static String comments = "";
+   public static String hashtag = "";
+   public static int likes;
+   public static String dateTime = "";
+   public static LocalDateTime time;
+   
    public static ArrayList<RegisteredUser> registeredUserAL = new ArrayList<RegisteredUser>();
    
    public static void main(String[] args)
     {
-        
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("MM-dd-yyyy hh:mm:ss");
         Scanner in = new Scanner(System.in);
         Scanner f = null;
         String fileUsers = "C:\\Users\\Rachel\\Documents\\PixTastic\\User.txt";
@@ -67,6 +78,46 @@ public class PixTastic extends Application
     {
             System.err.println("Caught IOException: " + e.getMessage());
     }
+    String filePictures = "C:\\Users\\Rachel\\Documents\\PixTastic\\Pictures.txt";
+        String line2 = "";
+    try
+    {  
+           FileReader fileReader = new FileReader(filePictures);
+           BufferedReader bufferedReader = new BufferedReader(fileReader);
+           
+           
+           while((line2 = bufferedReader.readLine()) != null)
+           { 
+             String[] inputSplit = line.split("(?<=\") *(?=\")");  
+             uname = inputSplit[0];
+             owner = RegisteredUser.parseRegisteredUser(uname);
+             System.out.println(owner);
+             filepath = inputSplit[1];
+             System.out.println(filepath);
+             caption = inputSplit[2];
+             System.out.println(caption);
+             comments = inputSplit[3];
+             System.out.println(comments);
+             hashtag = inputSplit[4];
+             System.out.println(hashtag);
+             likes = Integer.valueOf(inputSplit[5]);
+             System.out.println(likes);
+             dateTime = inputSplit[6];
+             LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
+            
+             RegisteredUser.Picture picture = new Picture(username, name, location, profilePic, bio, true); 
+             registeredUserAL.add(user);
+             numUsers++;
+             //System.out.println(" " + registeredUserAL);
+           }
+           bufferedReader.close();
+    }
+        
+    catch (IOException e) 
+    {
+            System.err.println("Caught IOException: " + e.getMessage());
+    }
+    
     /*
         RegisteredUser user1 = new RegisteredUser("seth77","Seth Perts","Virginia","C:\\Users\\Seth\\Desktop\\CPSC 240\\Group Project Pictures\\images.jpg","I go to school at UMW. My favorite color is blue. My favorite football team is the steelers. Go Pittsburgh!",true);
         GUI.userLoggedIn = user1;

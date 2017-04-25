@@ -1,10 +1,14 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Picture
 {
-    private RegisteredUser owner;
+    protected RegisteredUser owner;
+    protected String username;
     protected String filepath;  //filepath of the picture
     protected String caption; //caption attached to the picture
     protected String comments; //comments attached to the picture
@@ -12,6 +16,8 @@ public class Picture
     private ArrayList<String> likedBy;
     protected int likes; //number of likes associated with a picture
     protected LocalDateTime time;  //time a picture was 
+    public String formatTime = "";
+    //protected String likedBy = "";
     
     /**
     *  Default constructor to initialize a picture.
@@ -21,16 +27,22 @@ public class Picture
     *  @param h the hashtags attached to the picture
     *  @param l the number of likes a picture has
     */
-    public Picture(String f, String cap, String com, String h, int l)
+    public Picture(RegisteredUser u, String f, String cap, String com, String h, int l, LocalDateTime t)
     {
+        owner = u;
         filepath = f;
         caption = cap;
         comments = com;
         hashtag = h;
         likes = l;
-        time = LocalDateTime.now();
-        owner = GUI.userLoggedIn;
+        time = t;
+        //time =   LocalDateTime.now();
+        //formatTime = t;
+        
+        
+        //likedBy = lB;
         likedBy = new ArrayList<String>();
+        LocalDateTime.of(LocalDate.of(l, Month.MARCH, l), LocalTime.of(l, l, l));
     }
     /**
      * Accessor method for file-path.
@@ -118,12 +130,26 @@ public class Picture
     }
     
     /**
-     * @return the owner
+     * @return the time
      */
     public LocalDateTime getTime() {
         return time;
     }
+    
+    /**
+    * Returns LocalDateTime formatted to a string.
+    * @return formated time
+    */
+   
+   public String formatTime()
+   {
+     formatTime = String.format("%6.2f", time);
+     return formatTime;
+   }
 
+   
+   
+   /**
     /**
      * @return the likedBy
      */
@@ -137,4 +163,5 @@ public class Picture
     public void setLikedBy(ArrayList<String> likedBy) {
         this.likedBy = likedBy;
     }
+    
 }
