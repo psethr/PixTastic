@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 
@@ -19,15 +20,16 @@ public class GUI
 {
     private static Stage alertBoxStage, confirmBoxStage, entryBoxStage, createPictureStage;
     private static Scene alertBoxScene, confirmBoxScene, entryBoxScene, createAccountScene, loginScene, profileScene, pictureScene,
-            createPictureScene;
+            createPictureScene, mainFeedScene;
     private static Button alertBoxButton, confirmBoxButtonYes, confirmBoxButtonNo, entryBoxButton,
             createAccountButton, createAccoutButtonGoBack, loginButton, loginButtonGoBack, profileButtonFollow,
-            profileButtonMainFeed, profileButtonCreatePicture, pictureButtonLike, pictureButtonComment, createPictureButton, createPictureButtonGoBack;
+            profileButtonMainFeed, profileButtonCreatePicture, pictureButtonLike, pictureButtonComment, createPictureButton, createPictureButtonGoBack,
+            mainFeedButtonSearch, mainFeedButtonSortTime, mainFeedButtonSortLikes, mainFeedButtonSortLocation;
     private static Label alertBoxLabel, confirmBoxLabel, entryBoxLabel, createAccountTitleLabel, createAccountInfo1Label, 
             createAccountInfo2Label, loginLabelTitle, loginLabelUsername, loginLabelName, profileLabelTitle,
             profileLabelInfo, profileLabelFeed, profileLabelAlreadyFollow, pictureLabelInfo, pictureLabelInfo2, 
             pictureLabelAlreadyLiked, pictureLabelComments, pictureLabelComments2, pictureLabelCaption, pictureLabelInfo3,
-            createPictureLabelTitle, createPictureLabelInfo, createPictureLabelInfo1;
+            createPictureLabelTitle, createPictureLabelInfo, createPictureLabelInfo1, mainFeedLabelTitle, mainFeedLabel;
     private static VBox alertBoxVBox, confirmBoxVBox, entryBoxVBox, createAccountVBoxTop, createAccountVBoxBottom,
             createAccountVBoxCenter, loginVBoxLeft, loginVBoxRight, loginVBoxBottom, profileVBox, profileVBoxTop,
             profileVBoxFeed, pictureVBoxPicCap, pictureVBoxInfoLike, pictureVBox, createPictureVBox, createPictureVBoxTextField;
@@ -245,8 +247,8 @@ public class GUI
                                                     createAccountTextFieldBiography.getText(),
                                                     true);
             PixTastic.registeredUserAL.add(user);
-            //GUI.userLoggedIn = user;
-            Profile(PixTastic.registeredUserAL.get(1));
+            GUI.userLoggedIn = user;
+            Profile(user);
         });
         createAccountTextFieldUsername = new TextField();
         createAccountTextFieldUsername.setMinWidth(350);
@@ -375,6 +377,9 @@ public class GUI
         
         profileButtonFollow = new Button("Follow This Person?");
         profileButtonMainFeed = new Button("Go to Main Feed");
+        profileButtonMainFeed.setOnAction(e -> {
+            MainFeed();
+        });
         profileButtonCreatePicture = new Button("Create a New Post");
      
         System.out.println(userLoggedIn.getAlFollowing().contains(user));
@@ -435,6 +440,8 @@ public class GUI
         profileHBox.setAlignment(Pos.TOP_LEFT);
         profileHBox.getChildren().addAll(profileVBoxTop, image);
         
+        bottomMenu.setAlignment(Pos.BOTTOM_CENTER);
+        
         profileVBox = new VBox(10);
         profileVBox.setPadding(new Insets(10));
         profileVBox.getChildren().addAll(profileHBox, profileScrollPane, bottomMenu);
@@ -450,8 +457,8 @@ public class GUI
         image.setFitHeight(450);
         image.setFitWidth(450);
         
-        pictureLabelCaption = new Label(pic.getCaption());
-        pictureLabelCaption.setFont(Font.font("arial", 30));
+        pictureLabelCaption = new Label("\""+pic.getCaption()+"\"");
+        pictureLabelCaption.setFont(Font.font("arial", FontPosture.ITALIC, 30));
         pictureLabelInfo = new Label("Posted By:\t\t\t");
         pictureLabelInfo.setFont(Font.font("arial", 20));
         pictureLabelInfo3 = new Label(pic.getOwner().getUsername());
@@ -492,9 +499,11 @@ public class GUI
             pic.addComments(ans);
             PicturePost(pic);
         });
-        
+        profileButtonMainFeed.setOnAction(e -> {
+            MainFeed();
+        });
         pictureHBoxLike = new HBox(15);
-        pictureHBoxLike.getChildren().addAll(pictureButtonLike, pictureLabelAlreadyLiked);
+        pictureHBoxLike.getChildren().addAll(profileButtonMainFeed, pictureButtonLike, pictureLabelAlreadyLiked);
         pictureHBoxUser = new HBox(0);
         pictureHBoxUser.getChildren().addAll(pictureLabelInfo, pictureLabelInfo3);
         pictureHBoxComment = new HBox(700);
@@ -585,5 +594,10 @@ public class GUI
         
         createPictureStage.setScene(createPictureScene);
         createPictureStage.showAndWait();
+    }
+    
+    public static void MainFeed()
+    {
+        
     }
 }
